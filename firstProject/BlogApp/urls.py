@@ -3,5 +3,6 @@ from . import views
 
 #address list
 urlpatterns = {
-    path("firstPage",views.firstPage)
+    path("home",views.firstPage) ,
+    path("contact",views.contact)
 }
