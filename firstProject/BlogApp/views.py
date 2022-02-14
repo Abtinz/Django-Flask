@@ -6,3 +6,6 @@ def firstPage(request):
 
 def contact(request):
     return HttpResponse("Contact us : </br>GitHub : Abtinz  Email : NotAbtin@FakeEmail.com" )
+
+def account(request , username):
+    return HttpResponse(f"Account:</br>UserName:{username}</br>Hi {username}</br>this is your django profile" )
