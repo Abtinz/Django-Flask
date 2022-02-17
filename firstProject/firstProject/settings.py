@@ -29,7 +29,8 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
-
+#if we want to make a new project and app : python ./mange.py startapp <<app name>>  in terminal
+#put a new url for new project
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',

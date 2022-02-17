@@ -3,7 +3,7 @@ from . import views
 
 #address list
 urlpatterns = {
-    path("home",views.firstPage) ,
+    path("",views.home) ,
     path("contact",views.contact),
-    path("<username>",views.account)
+    path("profile/<username>",views.account),
 }
