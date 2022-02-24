@@ -7,5 +7,6 @@ def courses_list(request):
 
 def course_information(request , course_id):
      course = Course.objects.get(id = course_id)
-     
+     course.views_count -=-1
+     course.save()
      return render(request , "courses_app/course_information.html" , context={ "course" : course})

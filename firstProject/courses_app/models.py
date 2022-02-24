@@ -10,6 +10,7 @@ class Course(models.Model) :
     status = models.BooleanField(default=True)
     attenders = models.IntegerField(default=0)
     sessions = models.IntegerField(default=0)
+    views_count = models.IntegerField(default=0)
     #started_date  = models.TimeField()
 
     def __str__(self):

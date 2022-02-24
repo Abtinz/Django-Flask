@@ -19,18 +19,20 @@
                 <th scope="col">Course Status</th>
                 <th scope="col">Course Sessions</th>
                 <th scope="col">Course Attenders</th>
+                <th scope="col">Course Views</th>
               </tr>
             </thead>
             <tbody>
                 {% for course in courses%}
               <tr>
                 <th scope="row">{{course.id}}</th>
-                <td>{{course.title}}</td>
+                <td><a href="/course/information/{{course.id}}">{{course.title}}</a></td>
                 <td>{{course.teacher_fullname}}</td>
                 <td>{{course.description}}</td>
                 <td>{{course.status}}</td>
                 <td>{{course.sessions}}</td>
                 <td>{{course.attenders}}</td>
+                <td>{{course.views_count}}</td>
               </tr>
               {% endfor %}
             </tbody>
