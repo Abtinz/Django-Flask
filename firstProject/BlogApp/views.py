@@ -6,6 +6,10 @@ def home(request):
 def contact(request):
     return render(request,"BlogApp/contact.html")
 
+
+def new_account(request):
+    return render(request,"BlogApp/new_account.html")
+
 def account(request , username):
     user = user_information.objects.get(username = username)
     return render(request,"BlogApp/account.html" , context={"account" : user})
