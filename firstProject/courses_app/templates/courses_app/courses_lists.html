@@ -27,11 +27,27 @@
               <tr>
                 <th scope="row">{{course.id}}</th>
                 <td><a href="/course/information/{{course.id}}">{{course.title}}</a></td>
-                <td>{{course.teacher_fullname}}</td>
+                <td><span class="badge badge-primary">{{course.teacher_fullname}}</span>
+                </td>
                 <td>{{course.description}}</td>
-                <td>{{course.status}}</td>
+                <td>
+                  {% if course.status == True %}
+                  <span class="badge badge-success">{{course.status}}</span> 
+                  {% elif course.status == False %}
+                  <span class="badge badge-danger">{{course.status}}</span>
+                  {% endif %}
+                  
+                </td>
                 <td>{{course.sessions}}</td>
-                <td>{{course.attenders}}</td>
+                <td>
+                  {% if course.attenders >= 1000  %}
+                  <span class="badge badge-success">{{course.attenders}}</span> 
+                  {% elif course.attenders < 1000 and  course.attenders >= 100 %}
+                  <span class="badge badge-warning">{{course.attenders}}</span>
+                  {% elif course.attenders < 100 %}
+                  <span class="badge badge-danger">{{course.attenders}}</span>
+                  {% endif %}
+                  </td>
                 <td>{{course.views_count}}</td>
               </tr>
               {% endfor %}
