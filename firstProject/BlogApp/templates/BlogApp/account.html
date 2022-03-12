@@ -8,34 +8,38 @@
  <title>account</title>
 </head>
 <style>
-    h1{
-          color: green;
-          font-size:  x-large;
-          font-style: bold and italic;
-          margin-right: 40px;
-          margin-bottom: 0px;
-        
-    }
-
-    p{
-        font-size: xx-large;
-        margin-top: 0px;
-        background-color: rgb(83, 182, 26);
-        color: rgb(34, 58, 37);
-    }
-    .titleIformations{
-        background-color: rgb(185, 201, 141);
-    }
-
+    
 </style>
 <body>
     <div class = "titleIformations">
-        <h1>
-            Account:
-        </h1>
-        <p>UserName: {{username}}</br></br>Hi {{username}}</br>this is your django profile
-        </p>
+        <div class="table">
+            <table class="table">
+                <thead>
+                  <tr>
+                    WELCOME {{account.full_name}}:
+                    Your Account Information:
+                  </tr>
+                </thead>
+                <tbody>
+                    
+                    <tr>
+                        <th scope="col">User Full Name:{{account.full_name}} </th>
+                    </tr>
 
+                    <tr>
+                        <th scope="col">UserName:{{account.username}} </th>
+                    </tr>
+
+                    <tr>
+                          <th scope="col">Email:{{account.email}} </th>
+                    </tr>
+                        
+                    <tr>
+                        <th scope="col">Bio:{{account.Bio}} </th>
+                    </tr>
+                </tbody>
+              </table>
+        </div>
     </div>
 </body>
 </html>
