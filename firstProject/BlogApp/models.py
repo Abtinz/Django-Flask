@@ -1,3 +1,4 @@
+from distutils.command.upload import upload
 from django.db import models
 
 class user_information(models.Model):
@@ -7,6 +8,7 @@ class user_information(models.Model):
     password = models.CharField(max_length=30)
     email = models.EmailField(max_length=30)
     Bio = models.TextField()
+    profile_image = models.ImageField(null = True , upload_to = "profiles")
 
     def __str__(self):
         return self.username
