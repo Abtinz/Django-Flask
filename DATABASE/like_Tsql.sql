@@ -3,4 +3,8 @@ use AdventureWorks2016
 GO 
 --start with ...
 Select * FROM HumanResources.Department
-WHERE NAME LIKE 'P%'
+WHERE Name LIKE 'P%'
+
+--end with ...
+Select * FROM HumanResources.Department
+WHERE Name LIKE '%ing'
