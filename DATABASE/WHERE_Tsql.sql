@@ -20,4 +20,19 @@ GO
 Select * FROM HumanResources.Employee
 WHERE NationalIDNumber = 295847284 OR NationalIDNumber = 509647174
 
+--top of the table
+GO
+Select TOP 50 * FROM HumanResources.Employee
 
+--min and max
+GO 
+Select min(VacationHours) FROM HumanResources.Employee
+
+GO 
+Select min(SickLeaveHours) FROM HumanResources.Employee
+
+GO 
+Select max(VacationHours) FROM HumanResources.Employee
+
+GO 
+Select max(SickLeaveHours) FROM HumanResources.Employee
