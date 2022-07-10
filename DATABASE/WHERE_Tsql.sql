@@ -15,3 +15,9 @@ GO
 --NOTEQUAL IN SQL
 Select * FROM HumanResources.Employee
 WHERE  NationalIDNumber <> 295847284
+
+GO
+Select * FROM HumanResources.Employee
+WHERE NationalIDNumber = 295847284 OR NationalIDNumber = 509647174
+
+
