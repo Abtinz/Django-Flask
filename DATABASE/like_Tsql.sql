@@ -20,3 +20,7 @@ WHERE Name LIKE '__m%'
 --SECOND CHAR FROM LASTS CHARACTERS IS ...
 Select * FROM HumanResources.Department
 WHERE Name LIKE '%n_'
+
+--CONTAINS ... CHARACTERS
+Select * FROM HumanResources.Department
+WHERE Name LIKE '%an%'
