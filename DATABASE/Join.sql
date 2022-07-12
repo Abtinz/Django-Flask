@@ -19,3 +19,10 @@ GO
 SELECT MajorTypeID , MajorTitle FROM Persons
 RIGHT JOIN Majors 
 ON Persons.MajorTypeID = Majors.MajorID
+
+--SELF INNER JOIN
+GO
+SELECT C2.CourseTitle,C1.CourseTitle
+FROM Courses AS C1
+INNER JOIN Courses AS C2
+ON C1.CategoryID = C2.ParentID
