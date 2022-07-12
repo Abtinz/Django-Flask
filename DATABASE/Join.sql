@@ -26,3 +26,11 @@ SELECT C2.CourseTitle,C1.CourseTitle
 FROM Courses AS C1
 INNER JOIN Courses AS C2
 ON C1.CategoryID = C2.ParentID
+
+GO
+SELECT  C3.CourseTitle, C2.CourseTitle,C1.CourseTitle
+FROM Courses AS C1
+INNER JOIN Courses AS C2
+ON C1.CategoryID = C2.ParentID
+INNER JOIN Courses AS C3
+ON C2.CategoryID = C3.ParentID
