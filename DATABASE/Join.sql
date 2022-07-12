@@ -34,3 +34,8 @@ INNER JOIN Courses AS C2
 ON C1.CategoryID = C2.ParentID
 INNER JOIN Courses AS C3
 ON C2.CategoryID = C3.ParentID
+
+GO
+SELECT MajorTypeID , MajorTitle FROM Persons
+FULL OUTER JOIN Majors 
+ON Persons.MajorTypeID = Majors.MajorID
