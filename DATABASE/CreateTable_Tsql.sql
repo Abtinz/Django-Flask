@@ -21,3 +21,13 @@ CREATE TABLE DataStructureCourse(
 
 		PRIMARY KEY(PersonID)
 );
+
+
+--constraint
+CREATE TABLE MLOnlineCourse(
+        PersonID INT ,
+		SureName NVARCHAR(20) ,
+		LastName NVARCHAR(20) ,
+		Country NVARCHAR(20) DEFAULT  'Tehran'
+		PRIMARY KEY(PersonID)
+);
