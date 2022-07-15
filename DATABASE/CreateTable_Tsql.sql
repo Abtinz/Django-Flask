@@ -28,6 +28,12 @@ CREATE TABLE MLOnlineCourse(
         PersonID INT ,
 		SureName NVARCHAR(20) ,
 		LastName NVARCHAR(20) ,
-		Country NVARCHAR(20) DEFAULT  'Tehran'
+		Country NVARCHAR(20) DEFAULT  'Tehran' ,
+		NationID NVARCHAR(20) UNIQUE ,
+		AGE INT
+		CHECK (AGE>15 AND AGE<90)
 		PRIMARY KEY(PersonID)
+			
 );
+
+
