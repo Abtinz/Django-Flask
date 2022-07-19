@@ -25,3 +25,8 @@ FROM HumanResources.Employee
 GO
 SELECT MAX(VacationHours) AS 'MAX of VacationHours of Lazy Employees'
 FROM HumanResources.Employee
+
+GO
+SELECT ProductID,SUM(OrderQty)
+FROM Sales.SalesOrderDetail
+GROUP BY ProductID
