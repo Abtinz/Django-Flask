@@ -8,3 +8,10 @@ CREATE VIEW ContactView AS
 SELECT Email , PhoneNumber
 FROM Persons
 WHERE PersonId BETWEEN 5 AND 50
+
+--REPLACE VIEW
+GO
+CREATE OR ALTER VIEW ContactView AS
+SELECT Email , PhoneNumber
+FROM Persons
+WHERE PersonId BETWEEN 5 AND 50
