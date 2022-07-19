@@ -16,3 +16,7 @@ ALTER COLUMN CourseInstituation NVARCHAR(30) NULL
 
 GO
 SP_RENAME 'Courses.CourseInstituation' , 'Instituation' , 'COLUMN'
+
+GO
+ALTER TABLE Courses
+DROP COLUMN Instituation;
