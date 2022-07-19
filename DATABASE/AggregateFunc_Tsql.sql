@@ -30,3 +30,8 @@ GO
 SELECT ProductID,SUM(OrderQty)
 FROM Sales.SalesOrderDetail
 GROUP BY ProductID
+
+GO
+SELECT ProductID,SUM(OrderQty)
+FROM Sales.SalesOrderDetail
+HAVING SUM(OrderQty) > 50
