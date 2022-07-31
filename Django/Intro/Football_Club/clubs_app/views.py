@@ -8,6 +8,6 @@ def clubs_table(request):
     raise Http404
 
 def club_information(request,club_name):
-        return HttpResponse(f'{club_name} Club')
+        return render(request , 'clubs_app/football_club_profile.html')
 
     
