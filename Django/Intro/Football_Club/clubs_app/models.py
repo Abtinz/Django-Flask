@@ -6,3 +6,7 @@ class Clube(models.Model):
      trophies_count = models.IntegerField(default=0)
      league_title = models.CharField(max_length = 30)
      country = models.CharField(max_length = 30)
+     rank = models.IntegerField()
+     #situation =  models.CharField(max_length = 30 )
+     def __str__(self):
+          return self.name
