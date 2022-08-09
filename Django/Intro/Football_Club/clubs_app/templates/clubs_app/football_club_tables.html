@@ -25,7 +25,7 @@
                 {% for club in clubs%}
               <tr>
                 
-                    <th scope="row">{{club.name}}</th>
+                    <th scope="row"><a href="/clubs/{{club.name}}/information">{{club.name}}</a></th>
                     <th scope="row">{{club.foundation_date}}</th>
                     <th scope="row">{{club.trophies_count}}</th>
                     <th scope="row">{{club.league_title}}</th>
