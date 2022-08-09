@@ -9,6 +9,6 @@ class Clube(models.Model):
      country = models.CharField(max_length = 30)
      rank = models.IntegerField()
      situation =  models.CharField(max_length = 30 ,default="OnFire")
-
+     club_logo = models.ImageField(default = "img\default.png")
      def __str__(self):
           return self.name
