@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
-    <title>Courses Information</title>
+    <title>Clubs Information Table</title>
 </head>
 <body>
     <div class="table">
@@ -31,7 +31,15 @@
                     <th scope="row">{{club.league_title}}</th>
                     <th scope="row">{{club.country}}</th>
                     <th scope="row">{{club.rank}}</th>
-                    <th scope="row">***</th>
+                    <th>
+                        {% if club.situation == "Tragedy"  %}
+                              <span class="badge badge-danger">{{club.situation}}</span> 
+                        {% elif club.situation == "Good"  %}
+                              <span class="badge badge-success">{{club.situation}}</span> 
+                        {% elif club.situation == "OnFire"  %}
+                              <span class="badge badge-secondary">{{club.situation}}</span> 
+                        {% endif %}
+                        </th>
                 
               </tr>
               {%  endfor %}
