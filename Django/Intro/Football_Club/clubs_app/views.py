@@ -2,7 +2,7 @@ from django.http import Http404
 from django.shortcuts import render , HttpResponse
 from .models import Clube
 def home(request):
-    return HttpResponse('welcom to football club app')
+    return render(request , 'clubs_app/home.html' )
 
 def clubs_table(request):
     clubs = Clube.objects.all()
