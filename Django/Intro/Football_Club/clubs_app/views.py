@@ -14,6 +14,7 @@ def club_information(request,club_name):
 
 
 def new_football_club(request): 
+    print(request.GET.get('clubs_name'))
     return render(request , 'clubs_app/add_club.html')
 
         
