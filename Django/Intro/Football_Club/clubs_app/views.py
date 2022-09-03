@@ -14,7 +14,13 @@ def club_information(request,club_name):
 
 
 def new_football_club(request): 
-    print(request.GET.get('clubs_name'))
+    club_name = request.GET.get('clubs_name')
+    foundation_date = request.GET.get('foundation_date')
+    clubs_league = request.GET.get('clubs_league')
+    clubs_rank = request.GET.get('clubs_rank')
+    clubs_country = request.GET.get('clubs_country')
+
+    if club_name and foundation_date and clubs_league and clubs_rank and clubs_country:
     return render(request , 'clubs_app/add_club.html')
 
         
