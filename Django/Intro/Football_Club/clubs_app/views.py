@@ -1,15 +1,21 @@
 from django.http import Http404
 from django.shortcuts import render , HttpResponse
 from .models import Clube
-def home(request):
-    return render(request , 'clubs_app/home.html' )
+
+def home(request): return render(request , 'clubs_app/home.html' )
 
 def clubs_table(request):
     clubs = Clube.objects.all()
     return render(request , 'clubs_app/football_club_tables.html' ,  context={'clubs':clubs})
+
 def club_information(request,club_name):
         club = Clube.objects.get(name = club_name)
         return render(request , 'clubs_app/football_club_profile.html' ,  context={'club':club})
+
+
+def new_football_club(request): 
+    return render(request , 'clubs_app/add_club.html')
+
         
 
     
