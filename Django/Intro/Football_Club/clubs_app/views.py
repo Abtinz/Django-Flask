@@ -20,7 +20,13 @@ def new_football_club(request):
     clubs_rank = request.GET.get('clubs_rank')
     clubs_country = request.GET.get('clubs_country')
 
-    if club_name and foundation_date and clubs_league and clubs_rank and clubs_country:
+    if club_name and foundation_date and clubs_league and clubs_rank and clubs_country: 
+        Clube.objects.create( name = club_name ,
+            foundation_date = foundation_date ,
+            league_title = clubs_league ,
+             rank = clubs_rank ,
+            country = clubs_country
+        )
     return render(request , 'clubs_app/add_club.html')
 
         
