@@ -1,5 +1,4 @@
-from django.http import Http404
-from django.shortcuts import render , HttpResponse
+from django.shortcuts import render , redirect
 from .models import Clube
 
 def home(request): return render(request , 'clubs_app/home.html' )
@@ -25,8 +24,10 @@ def new_football_club(request):
             foundation_date = foundation_date ,
             league_title = clubs_league ,
              rank = clubs_rank ,
-            country = clubs_country
-        )
+            country = clubs_country)
+
+        url = "/clubs/"+club_name+"/information"
+        return redirect(url)
     return render(request , 'clubs_app/add_club.html')
 
         
