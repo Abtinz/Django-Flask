@@ -12,7 +12,7 @@
         <table class="table">
             <thead>
               <tr>
-                <!--<th scope="col">Logo</th>-->
+                <th scope="col">Logo</th>
                 <th scope="col">Team Name</th>
                 <th scope="col">Foundation Date</th>
                 <th scope="col">Trophies Count</th>
@@ -26,7 +26,7 @@
                 {% for club in clubs%}
               <tr>
                 
-                    <!--<th scope="row"><img src="{{ club.club_logo.url }}" alt=""></th>-->
+                    <th scope="row"><img src="{{ club.club_logo.url }}" alt=""></th>
                     <th scope="row"><a href="/clubs/{{club.name}}/information">{{club.name}}</a></th>
                     <th scope="row">{{club.foundation_date}}</th>
                     <th scope="row">{{club.trophies_count}}</th>
