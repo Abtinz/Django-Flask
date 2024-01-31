@@ -1,3 +1,4 @@
+from typing import Any
 from django.db import models
 from django.core.validators import MaxValueValidator , MinValueValidator
 
@@ -9,4 +10,7 @@ class Product(models.Model):
         default  = 0,
         validators = [MinValueValidator(0), MaxValueValidator(100)]
     )
+
+    def __str__(self) -> str:
+        return self.name
 
