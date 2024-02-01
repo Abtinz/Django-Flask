@@ -15,6 +15,15 @@ class ProductViews(APIView):
         serializer = ProductSerializers(queryset , many = True)
         return Response(serializer.data)
     
+    def post(self , request):
+        serializer = ProductSerializers(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data , status= status.HTTP_201_CREATED)
+        else:
+            return Response({"message":"please follow true json passing ..."},status=status.HTTP_400_BAD_REQUEST)
+
+    
 class SingleProductViews(APIView):
 
     def is_exist(self , id):
