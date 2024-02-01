@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+
+  
+
+
+  <div class="container">
+    <div class="row d-flex justify-content-center">
+        <div class="col-12">
+            <div class="alert alert-info d-flex justify-content-between" role="alert">
+              <h5>ROOM :- {{room_name}}</h5>
+              <a href="/accounts/logout/">
+                <button type="button" class="btn btn-light">Click to Log Out</button>
+              </a>
+            </div>
+            <form>
+                <div class="form-group">
+                  {% if messages %}
+                  <div class="jumbotron" id="chatbox" style="padding: 4px 2px;max-height: 300px;  /* Adjust the max-height as needed */
+                  overflow-y: scroll;
+                "">
+                    
+                      {% for message in messages %}
+                        <div class="chat-message {% if message.user == request.user %}text-right{% else %}text-left{% endif %}">
+                          <b>{{ message.user.username }}</b> : {{ message.content }}<br>
+                        </div>
+                        {% endfor %}
+                    
+                    
+                  </div>
+                  {% else %}
+                  <div class="jumbotron" id="chatbox" style="padding: 4px 2px;"></div>
+                  <b>No Messages in this Room.</b>
+                    {% endif %}
+
+                </div>
+                <br/>
+                <div class="form-group" style="width: 100%;">
+                    <input class="form-control" placeholder="Enter text here" id="my_input" type="text" required></br>
+                </div>
+                <br/>
+                <input class="btn btn-primary btn-lg btn-block" id="submit_button" type="button" value="Send">
+            </form>
+        </div>
+    </div>
+</div>
+{{slug|json_script:"room_slug"}}
+<script>
+
+const chatbox = document.querySelector("#chatbox");
+
+  // Function to scroll to the bottom of the chatbox
+  function scrollToBottom() {
+    chatbox.scrollTop = chatbox.scrollHeight;
+  }
+
+  // Scroll to bottom when the page is loaded
+  scrollToBottom();
+
+ 
+    const roomName= JSON.parse(document.getElementById('room_slug').textContent);
+    const chatSocket = new WebSocket("ws://" + window.location.host + "/ws/"+ roomName +"/");
+    // const chatSocket = new WebSocket("ws://127.0.0.1:8000/ws/"+ roomName +"/");
+    // alert(chatSocket);
+    chatSocket.onopen = function (e) {
+      console.log("The connection was setup successfully !");
+    };
+    chatSocket.onclose = function (e) {
+      console.log("Something unexpected happened !");
+    };
+
+    document.querySelector("#my_input").focus();
+    document.querySelector("#my_input").onkeyup = function (e) {
+      if (e.keyCode == 13) {
+        e.preventDefault();
+        document.querySelector("#submit_button").click();
+      }
+    };
+    document.querySelector("#submit_button").onclick = function (e) {
+      var messageInput = document.querySelector(
+        "#my_input"
+      ).value;
+
+      if(messageInput.length == 0)
+        {
+            alert("Add some Input First Or Press Send Button!")
+        }
+        else
+        {
+          chatSocket.send(JSON.stringify({ message: messageInput, username : "{{request.user.username}}",room_name:"{{room_name}}"}));
+          
+         
+        }
+      
+    };
+
+    chatSocket.onmessage = function (e) {
+      const data = JSON.parse(e.data);
+      var div = document.createElement("div");
+      div.innerHTML = "<b>" + data.username + "</b> : " + data.message;
+
+      // Add class based on user authentication
+      if (data.username === "{{ request.user.username }}") {
+        div.classList.add("chat-message", "text-right");
+      } else {
+        div.classList.add("chat-message", "text-left");
+      }
+
+      document.querySelector("#my_input").value = "";
+      document.querySelector("#chatbox").appendChild(div);
+      scrollToBottom();
+    };
+  </script>
+
+
+
+{% else %}
+<div class="container">
+    <div class="alert alert-info d-flex justify-content-between" role="alert">
+        <h5>You are not logged in</h5>
+        <a href="/accounts/logout/">
+          <button type="button" class="btn btn-light"><a href="{% url 'login' %}">Log In</a></button>
+        </a>
+      </div>
+</div>  
+{% endif %}
+
+<br/>
+
+    
+
+
+
+
+{% endblock %}
