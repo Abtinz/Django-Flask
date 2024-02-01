@@ -1,6 +1,8 @@
 from django.shortcuts import render,HttpResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import status
+
 
 from .models import Product
 from .serializers import ProductSerializers
@@ -28,4 +30,7 @@ class SingleProductViews(APIView):
             serializer = ProductSerializers(queryset)
             return Response(serializer.data)
         else:
-            return Response({"message":"no items with this id ..."})
+            return Response(
+                {"message":"no items with this id ..."},
+                status=status.HTTP_400_BAD_REQUEST
+                )
