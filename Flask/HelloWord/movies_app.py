@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, abort
 from datasource import movies
 
 app = Flask(__name__)
@@ -14,8 +14,10 @@ def get_shawshenk():
             return movie
         
 @app.get("/movies/<title>")
-def get_shawshenk_titled(title):
+def get_titled(title):
     for movie in movies:
         if movie["Series_Title"] == title:
             return movie
+    #not fount error
+    return abort(404)
 app.run()
