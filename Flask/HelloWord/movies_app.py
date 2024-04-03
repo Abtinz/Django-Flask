@@ -30,4 +30,18 @@ def post_new_title():
     print(titles)
     return json_request
 
+@app.put("/movies/update/<title>")
+def put_title(title):
+    
+    print(title , request.json)
+    for movie in movies:
+        if movie["Series_Title"] == title:
+            movie["Series_Title"] = request.json["title"]
+            movie["Released_Year"] = request.json["year"]
+            movie["Certificate"] = request.json["certificate"]
+            return movie , 201
+    
+    return abort(404)
+
+
 app.run()
