@@ -1,0 +1,4 @@
+flask
+requests
+elasticsearch
+redis
