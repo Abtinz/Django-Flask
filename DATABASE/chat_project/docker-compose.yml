@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  
+  postgres-service:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=Abnzandi
+      - POSTGRES_PASSWORD=12345
+  
+
+  flask-app:
+    build: "/"
+    image: service_main:latest
+    ports:
+      - "5000:5000"
+    environment:
+      - DATABASE_HOST=postgres-service
+      - DATABASE_USER=Abnzandi
+      - DATABASE_PASSWORD=12345
+    depends_on:
+      - postgres-service
