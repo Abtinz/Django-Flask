@@ -7,18 +7,16 @@ services:
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_USER=Abnzandi
+      - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=12345
   
-
   flask-app:
     build: "/"
-    image: flassk_app:latest
+    image: flassk_app:v0.3
     ports:
       - "5000:5000"
     environment:
       - DATABASE_HOST=postgres-service
       - DATABASE_USER=Abnzandi
       - DATABASE_PASSWORD=12345
-    depends_on:
-      - postgres-service
+    
