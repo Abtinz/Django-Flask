@@ -1,3 +1,4 @@
+-- Active: 1715710371506@@127.0.0.1@3306@information_schema
 CREATE TABLE Account (
     ID INT PRIMARY KEY,
     Name VARCHAR(255),
