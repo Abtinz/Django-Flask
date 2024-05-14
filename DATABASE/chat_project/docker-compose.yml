@@ -13,7 +13,7 @@ services:
 
   flask-app:
     build: "/"
-    image: service_main:latest
+    image: flassk_app:latest
     ports:
       - "5000:5000"
     environment:
