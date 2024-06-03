@@ -1,0 +1,1 @@
+CREATE TABLE GroupUsers (userID INT,groupID INT,FOREIGN KEY (userID) REFERENCES Account(ID),FOREIGN KEY (groupID) REFERENCES Groups(ID));

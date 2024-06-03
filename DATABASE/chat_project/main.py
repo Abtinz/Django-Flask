@@ -11,7 +11,6 @@ def create_tables():
 
     try:
         postgresService.create_table()
-        postgresService.query_handler("SELECT * FROM Account")
         return jsonify(200, {'message': 'database is created successfully'} )
 
     except Exception as error:
