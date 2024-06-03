@@ -4,8 +4,8 @@ class PostgresService():
     def __init__(self) -> None:
         try:
             self.conn = psycopg2.connect(
-            dbname = "chatproject",
-            user = "postgres",
+            dbname = "dbname",
+            user = "Abnzandi",
             password = "12345",
             host = "localhost",
             port = "5432"
