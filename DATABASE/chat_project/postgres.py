@@ -111,6 +111,24 @@ class PostgresService():
         
         self.query_handler(query="SELECT * FROM Chat")
 
+    def chat_message_insert(self, query):
+       
+        if query is None:
+            insert_query = """
+                    INSERT INTO ChatMessage (ID, senderID, chatID, text) VALUES
+                    (1, 1, 1, 'Hello, how are you?'),
+                    (2, 2, 1, 'I am fine, thanks!'),
+                    (3, 8, 3, 'hi ciris, im the goat.'),
+                    (4, 9, 3, 'Noooooooooooooooooooooooooo');
+            """
+            
+            self.query_handler(query=insert_query)
+            
+        else:
+            self.query_handler(query=query)
+        
+        self.query_handler(query="SELECT * FROM ChatMessage")
+
     def group_insert(self, query):
        
         if query is None:
@@ -129,4 +147,37 @@ class PostgresService():
             self.query_handler(query=query)
         self.query_handler(query="SELECT * FROM Groups")
 
+    def group_message_insert(self, query):
+       
+        if query is None:
+            insert_query = """
+                    INSERT INTO GroupMessage (ID, senderID, groupID, text) VALUES
+                    (1, 1, 1, 'Welcome to Friends Group!'),
+                    (2, 2, 1, 'Thank you, glad to be here.'),
+                    (3, 8, 2, 'visca barca  and visca catolonia'),
+                    (4, 3, 4, 'android.kotlin.life');
+            """
+            
+            self.query_handler(query=insert_query)
+            
+        else:
+            self.query_handler(query=query)
+        self.query_handler(query="SELECT * FROM GroupMessage")
 
+    def group_user_insert(self, query):
+       
+        if query is None:
+            insert_query = """
+                    INSERT INTO GroupUsers (userID, groupID) VALUES
+                    (1, 1),
+                    (2, 1),
+                    (3, 4),
+                    (8, 2),
+                    (9, 2);
+            """
+            
+            self.query_handler(query=insert_query)
+            
+        else:
+            self.query_handler(query=query)
+        self.query_handler(query="SELECT * FROM GroupUsers")
