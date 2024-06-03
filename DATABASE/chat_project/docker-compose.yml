@@ -1,22 +1,26 @@
 version: '3.8'
 
 services:
-  
-  postgres-service:
+
+  postgres:
     image: postgres:latest
     ports:
-      - "5432:5432"
+      - "5433:5432"
     environment:
-      - POSTGRES_USER=admin
+      - POSTGRES_USER=Abnzandi
       - POSTGRES_PASSWORD=12345
-  
+      - POSTGRES_DB=dbname
+      - POSTGRES_HOST_AUTH_METHOD=scram-sha-256
+      - POSTGRES_INITDB_ARGS=--auth-host=scram-sha-256
+      - PGDATA=/var/lib/postgresql/data/pgdata
   flask-app:
-    build: "/"
-    image: flassk_app:v0.3
+    build: .
     ports:
       - "5000:5000"
     environment:
       - DATABASE_HOST=postgres-service
       - DATABASE_USER=Abnzandi
       - DATABASE_PASSWORD=12345
-    
+      - DATABASE_DB=dbname
+    depends_on:
+      - postgres

@@ -1,4 +1,5 @@
--- Active: 1715710371506@@127.0.0.1@3306@information_schema
+-- Active: 1717423284045@@127.0.0.1@5433@postgres
+
 CREATE TABLE Account (
     ID INT PRIMARY KEY,
     Name VARCHAR(255),
