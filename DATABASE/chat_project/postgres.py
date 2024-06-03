@@ -24,7 +24,16 @@ class PostgresService():
             print(cursor.fetchone()) 
         except Exception as error:
             print(error)
-        
+    def query_response(self,query):
+        try:
+            print("processing query: ",query)
+            cursor = self.conn.cursor()
+            cursor.execute(query)
+            result = cursor.fetchone()
+            return result
+        except Exception as error:
+            print(error)
+           
 
     def create_table(self):
 
