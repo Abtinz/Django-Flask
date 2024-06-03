@@ -1,0 +1,5 @@
+
+CREATE TABLE Groups (
+    ID INT PRIMARY KEY,
+    Name VARCHAR(255)
+);
