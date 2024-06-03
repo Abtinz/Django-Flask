@@ -42,3 +42,71 @@ class PostgresService():
             self.query_handler(query=query)
 
         print("Tables are created successfully")
+
+    def insert_users(self, query):
+        
+        if query is None:
+            insert_query = """
+                INSERT INTO Account (ID, name, fullname, phone, username) VALUES
+                (1, 'John', 'John Doe', '555-0101', 'john_doe'),
+                (2, 'Jane', 'Jane Smith', '555-0102', 'jane_smith'),
+                (3, 'abtin', 'abtin zandi', '0923131232', 'abnz'),
+                (4, 'jcob', 'jcob marc', '0922222222', 'jaco'),
+                (5, 'marc', 'marc Smith', '58222156', 'marc_smith'),
+                (6, 'raty', 'raty raty', '555-011101', 'ratyyyyy'),
+                (7, 'nader', 'nader Smith', '555-012202', 'nader'),
+                (8, 'leo', 'leo messi', '111111111', 'goat'),
+                (9, 'cristiano', 'cristiano ronaldo', '222222222222', 'cr7'),
+                (10, 'Janee', 'Janee Smith', '58744156', 'janee_smith');
+            """
+            self.query_handler(query=insert_query)
+        else:
+            self.query_handler(query=query)
+        
+        self.query_handler(query="SELECT * FROM Account")
+
+    def contacts_insert(self, query):
+       
+        if query is None:
+            insert_query = """
+                    INSERT INTO Contacts (ID, userID, chatID) VALUES
+                    (1, 1, 1),
+                    (2, 2, 1),
+                    (3, 1, 2),
+                    (4, 3, 2),
+                    (5, 8, 3),
+                    (6, 9, 3),
+                    (7, 10, 4),
+                    (8, 2, 4),
+                    (9, 7, 5),
+                    (10, 5, 5),
+                    (11, 6, 6),
+                    (12, 7, 6);
+            """
+
+            self.query_handler(query=insert_query)
+            
+        else:
+            self.query_handler(query=query)
+        
+        self.query_handler(query="SELECT * FROM Contacts")
+
+    def chat_insert(self, query):
+       
+        if query is None:
+            insert_query = """
+                    INSERT INTO Chat (ID, firstUserID, secondUserID) VALUES
+                    (1, 1, 2),
+                    (2, 1, 3),
+                    (3, 8, 9),
+                    (4, 10, 2),
+                    (5, 8, 3),
+                    (6, 6, 7);
+            """
+            
+            self.query_handler(query=insert_query)
+            
+        else:
+            self.query_handler(query=query)
+
+
