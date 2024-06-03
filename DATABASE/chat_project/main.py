@@ -15,6 +15,16 @@ def create_tables():
 
     except Exception as error:
         return abort(500,{'message': f'connection failed in database system {error}'})
+    
+@app.route('/api/tables/initialization', methods=['GET'])
+def initiate_tables():
+
+    try:
+        postgresService.init_table()
+        return jsonify(200, {'message': 'database values are created successfully'} )
+
+    except Exception as error:
+        return abort(500,{'message': f'connection failed in database system {error}'})
 
 
 @app.route('/api/users', methods=['GET'])
@@ -41,6 +51,20 @@ def get_user_chats(user_id):
     except Exception as error:
         return abort(500, description=f'Failed to fetch chats: {error}')
 
+@app.route('/api/contacts/<int:user_id>', methods=['GET'])
+def get_user_contacts(user_id):
+    try:
+        contacts = postgresService.query_response(
+            f"""SELECT c.ID, c.userID, c.chatID, a.name AS contact_name, a.fullname AS contact_fullname
+            FROM Contacts c
+            JOIN Account a ON c.userID = a.ID
+            WHERE c.userID = {user_id};
+            """
+        )
+        return jsonify(contacts)
+    except Exception as error:
+        return abort(500, description=f'Failed to fetch contacts: {error}')
+    
 @app.route('/api/chat/messages/<int:chat_id>', methods=['GET'])
 def get_chat_messages(chat_id):
     try:
@@ -72,6 +96,21 @@ def get_group_users(group_id):
         return jsonify(users)
     except Exception as error:
         return abort(500, description=f'Failed to fetch group users: {error}')        
+
+@app.route('/api/update/', methods=['GET'])
+def update_query():
+    query = request.args.get('query')
+    if not query:
+        return jsonify({'message': 'there is no query provided!'}), 400
+
+    try:
+        updated_value = postgresService.execute_dynamic_update(query)
+        if updated_value > 0:
+            return jsonify({'message': f'query is executed successfully and table is updated {updated_value} rows'}), 200
+        else:
+            return jsonify({'message': 'no rows updated(repeated data)'}), 200
+    except Exception as error:
+        return abort(500, f'message: failed to execute update query: {error}')
 
 if __name__ == '__main__':
     #initializing the postgres database system

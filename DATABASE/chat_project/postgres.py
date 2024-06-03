@@ -24,6 +24,7 @@ class PostgresService():
             print(cursor.fetchone()) 
         except Exception as error:
             print(error)
+            
     def query_response(self,query):
         try:
             print("processing query: ",query)
@@ -33,6 +34,16 @@ class PostgresService():
             return result
         except Exception as error:
             print(error)
+
+    def update_query(self, query):
+        try:
+            with self.connection.cursor() as cursor:
+                cursor.execute(query)
+                self.connection.commit()
+                return cursor.rowcount
+        except Exception as error:
+            print(error)
+            raise error
            
 
     def create_table(self):
@@ -143,10 +154,10 @@ class PostgresService():
         if query is None:
             insert_query = """
                     INSERT INTO Groups (ID, Name) VALUES
-                    (1, 'Friends');
-                    (2, 'Barcelona');
-                    (3, 'Python');
-                    (4, 'Kotlin');
+                    (1, 'Friends'),
+                    (2, 'Barcelona'),
+                    (3, 'Python'),
+                    (4, 'Kotlin'),
                     (5, 'Database');
             """
             
@@ -190,3 +201,12 @@ class PostgresService():
         else:
             self.query_handler(query=query)
         self.query_handler(query="SELECT * FROM GroupUsers")
+
+    def init_table(self):
+        self.insert_users(None)
+        self.chat_insert(None)
+        self.contacts_insert(None)
+        self.chat_message_insert(None)
+        self.group_insert(None)
+        self.group_message_insert(None)
+        self.group_user_insert(None)
