@@ -11,15 +11,15 @@ def create_tables():
 
     try:
         postgresService.create_table()
-        return abort(200,{'message': 'database is created successfully'})
+        postgresService.query_handler("SELECT * FROM Account")
+        return jsonify(200, {'message': 'database is created successfully'} )
 
     except Exception as error:
-        return abort(404,{'message': 'connection failed in database system'})
+        return abort(500,{'message': f'connection failed in database system {error}'})
 
         
 
 if __name__ == '__main__':
-    
     #initializing the postgres database system
     postgresService = PostgresService()
     app.run(debug=False, host='0.0.0.0', port=5000)
