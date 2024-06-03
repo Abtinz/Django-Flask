@@ -26,7 +26,6 @@ def initiate_tables():
     except Exception as error:
         return abort(500,{'message': f'connection failed in database system {error}'})
 
-
 @app.route('/api/users', methods=['GET'])
 def get_all_users():
     try:
@@ -97,20 +96,34 @@ def get_group_users(group_id):
     except Exception as error:
         return abort(500, description=f'Failed to fetch group users: {error}')        
 
-@app.route('/api/update/', methods=['GET'])
-def update_query():
-    query = request.args.get('query')
+@app.route('/api/insert/', methods=['POST'])
+def insert_query():
+    data = request.get_json()  # Get data from request body
+    query = data.get('query')
     if not query:
         return jsonify({'message': 'there is no query provided!'}), 400
 
     try:
+        postgresService.query_handler(query=query)
+        return jsonify({'message': 'query executed correctly'}), 200
+    except Exception as error:
+        return abort(500, description=f'failed to execute insert query: {error}')
+
+@app.route('/api/update/', methods=['POST'])
+def update_query():
+    data = request.get_json()  # Get data from request body
+    query = data.get('query')
+    if not query:
+        return jsonify({'message': 'There is no query provided!'}), 400
+
+    try:
         updated_value = postgresService.execute_dynamic_update(query)
         if updated_value > 0:
-            return jsonify({'message': f'query is executed successfully and table is updated {updated_value} rows'}), 200
+            return jsonify({'message': f'query is executed successfully and the table is updated in {updated_value} rows'}), 200
         else:
-            return jsonify({'message': 'no rows updated(repeated data)'}), 200
+            return jsonify({'message': 'no rows updated (repeated data)'}), 200
     except Exception as error:
-        return abort(500, f'message: failed to execute update query: {error}')
+        return abort(500, description=f'failed to execute update query: {error}')
 
 if __name__ == '__main__':
     #initializing the postgres database system
