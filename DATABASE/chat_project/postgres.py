@@ -108,5 +108,25 @@ class PostgresService():
             
         else:
             self.query_handler(query=query)
+        
+        self.query_handler(query="SELECT * FROM Chat")
+
+    def group_insert(self, query):
+       
+        if query is None:
+            insert_query = """
+                    INSERT INTO Groups (ID, Name) VALUES
+                    (1, 'Friends');
+                    (2, 'Barcelona');
+                    (3, 'Python');
+                    (4, 'Kotlin');
+                    (5, 'Database');
+            """
+            
+            self.query_handler(query=insert_query)
+            
+        else:
+            self.query_handler(query=query)
+        self.query_handler(query="SELECT * FROM Groups")
 
 
