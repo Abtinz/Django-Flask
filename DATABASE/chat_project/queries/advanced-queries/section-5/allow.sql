@@ -1,0 +1,4 @@
+CREATE USER Arousha2000azad WITH PASSWORD 'Arousha_Azad';
+REVOKE SELECT ON account FROM Arousha2000azad;
+
+GRANT INSERT, UPDATE, DELETE ON account TO Arousha2000azad;
