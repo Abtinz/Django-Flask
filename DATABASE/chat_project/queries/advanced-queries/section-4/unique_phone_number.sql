@@ -1,3 +1,6 @@
+--here we have a trigger and it's function for our chat messages service
+--i think its obvious that you should provide chatID or receiverID science we don't have broadcast or anonymous chats!
+
 CREATE OR REPLACE FUNCTION ensure_message_validity()
 RETURNS TRIGGER AS $$
 BEGIN
