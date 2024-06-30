@@ -10,3 +10,6 @@ BEGIN
     RETURN message_count;
 END;
 $$ LANGUAGE plpgsql;
+
+
+SELECT count_messages_between_users(1, 2);
