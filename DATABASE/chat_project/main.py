@@ -165,9 +165,9 @@ def get_group_users(group_id):
 '''
  this api will  insert any data and query dynamically to our database via postgresService.query_handler
     Method: POST
-    parameter: group_id: int value of specific group
+    parameter: sql query
     response:
-       list of group_id's users
+       RESULTS of Operation
 '''  
 @app.route('/api/insert/', methods=['POST'])
 def insert_query():
@@ -183,11 +183,11 @@ def insert_query():
         return abort(500, description=f'failed to execute insert query: {error}')
 
 '''
- this api will  give us an information of given group's id users from our database
-    Method: GET
-    parameter: group_id: int value of specific group
+ this api will  delete any data with given query in dynamically way and through postgresService.query_handler
+    Method: DELETE
+    parameter: sql query
     response:
-       list of group_id's users
+       RESULTS of Operation
 ''' 
 @app.route('/api/delete/', methods=['DELETE'])
 def delete_query():
@@ -202,6 +202,13 @@ def delete_query():
     except Exception as error:
         return abort(500, description=f'failed to execute delete query: {error}')
 
+'''
+ this api will update any data with given query in dynamically way and through postgresService.query_handler
+    Method: PULL
+    parameter: sql query
+    response:
+       RESULTS of Operation
+''' 
 @app.route('/api/update/', methods=['PULL'])
 def update_query():
     data = request.get_json()  # Get data from request body
