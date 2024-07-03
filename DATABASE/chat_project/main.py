@@ -53,7 +53,7 @@ def get_all_users():
         return abort(500, description=f'Failed to fetch users: {error}')
 
 '''
- this api will will give us an information of given user's id account from our database
+ this api will give us an information of given user's id account from our database
     Method: GET
     parameter: user_id: int value of specific user
     response:
@@ -68,7 +68,7 @@ def get_user(user_id):
         return abort(500, description=f'Failed to fetch user: {error}')
     
 '''
- this api will will give us an information of given user's id chats from our database
+ this api will give us an information of given user's id chats from our database
     Method: GET
     parameter: user_id: int value of specific user
     response:
@@ -83,7 +83,7 @@ def get_user_chats(user_id):
         return abort(500, description=f'Failed to fetch chats: {error}')
 
 '''
- this api will will give us an information of given user's id contacts from our database
+ this api will give us an information of given user's id contacts from our database
     Method: GET
     parameter: user_id: int value of specific user
     response:
@@ -104,7 +104,7 @@ def get_user_contacts(user_id):
         return abort(500, description=f'Failed to fetch contacts: {error}')
 
 '''
- this api will will give us an information of given user's id contacts from our database
+ this api will give us an information of given user's id contacts from our database
     Method: GET
     parameter: user_id: int value of specific user
     response:
@@ -119,7 +119,7 @@ def get_chat_messages(chat_id):
         return abort(500, description=f'Failed to fetch chat messages: {error}')
 
 '''
- this api will will give us a list of groups
+ this api will give us a list of groups
     Method: GET
     response:
        list of groups
@@ -133,7 +133,7 @@ def get_all_groups():
         return abort(500, description=f'Failed to fetch groups: {error}')
 
 '''
- this api will will give us an information of given group's id messages from our database
+ this api will give us an information of given group's id messages from our database
     Method: GET
     parameter: group_id: int value of specific group
     response:
@@ -148,7 +148,7 @@ def get_group_messages(group_id):
         return abort(500, description=f'Failed to fetch group messages: {error}')
 
 '''
- this api will will give us an information of given group's id users from our database
+ this api will give us an information of given group's id users from our database
     Method: GET
     parameter: group_id: int value of specific group
     response:
@@ -162,6 +162,13 @@ def get_group_users(group_id):
     except Exception as error:
         return abort(500, description=f'Failed to fetch group users: {error}')        
 
+'''
+ this api will  insert any data and query dynamically to our database via postgresService.query_handler
+    Method: POST
+    parameter: group_id: int value of specific group
+    response:
+       list of group_id's users
+'''  
 @app.route('/api/insert/', methods=['POST'])
 def insert_query():
     data = request.get_json()  # Get data from request body
@@ -175,7 +182,14 @@ def insert_query():
     except Exception as error:
         return abort(500, description=f'failed to execute insert query: {error}')
 
-@app.route('/api/delete/', methods=['POST'])
+'''
+ this api will  give us an information of given group's id users from our database
+    Method: GET
+    parameter: group_id: int value of specific group
+    response:
+       list of group_id's users
+''' 
+@app.route('/api/delete/', methods=['DELETE'])
 def delete_query():
     data = request.get_json()  # Get data from request body
     query = data.get('query')
@@ -188,7 +202,7 @@ def delete_query():
     except Exception as error:
         return abort(500, description=f'failed to execute delete query: {error}')
 
-@app.route('/api/update/', methods=['POST'])
+@app.route('/api/update/', methods=['PULL'])
 def update_query():
     data = request.get_json()  # Get data from request body
     query = data.get('query')
