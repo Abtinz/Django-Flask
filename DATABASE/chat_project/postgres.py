@@ -1,5 +1,11 @@
 import psycopg2
 
+'''
+    This class will implement a postgres DBMS object and will all essential functions for processing and handling queries
+
+    conn ->
+        DBMS connection which will give us fetch, query_execution and ... options.
+'''
 class PostgresService():
     def __init__(self):
         self.conn = None
@@ -14,7 +20,6 @@ class PostgresService():
             print("postgres connection is established.")
         except Exception as error:
             print("Failed to connect to the postgres! error message:", error)
-
 
     def query_handler(self,query):
         try:
@@ -44,7 +49,6 @@ class PostgresService():
         except Exception as error:
             print(error)
             raise error
-           
 
     def create_table(self):
 
