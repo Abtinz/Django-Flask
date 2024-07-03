@@ -6,6 +6,12 @@ from postgres import PostgresService
 
 app = Flask(__name__)
 
+'''
+    this api will create all tables, relations and entities
+    Method: GET
+    response:
+        status and result of operation
+'''
 @app.route('/api/tables/create', methods=['GET'])
 def create_tables():
 
@@ -15,7 +21,13 @@ def create_tables():
 
     except Exception as error:
         return abort(500,{'message': f'connection failed in database system {error}'})
-    
+
+'''
+    this api will initiate all tables with fake values
+    Method: GET
+    response:
+        status and result of operation
+'''    
 @app.route('/api/tables/initialization', methods=['GET'])
 def initiate_tables():
 
@@ -26,6 +38,12 @@ def initiate_tables():
     except Exception as error:
         return abort(500,{'message': f'connection failed in database system {error}'})
 
+'''
+ this api will will give us a list of all present users account information from our database
+    Method: GET
+    response:
+       list of all present users account information
+'''
 @app.route('/api/users', methods=['GET'])
 def get_all_users():
     try:
@@ -34,6 +52,13 @@ def get_all_users():
     except Exception as error:
         return abort(500, description=f'Failed to fetch users: {error}')
 
+'''
+ this api will will give us an information of given user's id account from our database
+    Method: GET
+    parameter: user_id: int value of specific user
+    response:
+       user information
+'''
 @app.route('/api/user/<int:user_id>', methods=['GET'])
 def get_user(user_id):
     try:
@@ -41,7 +66,14 @@ def get_user(user_id):
         return jsonify(user)
     except Exception as error:
         return abort(500, description=f'Failed to fetch user: {error}')
-
+    
+'''
+ this api will will give us an information of given user's id chats from our database
+    Method: GET
+    parameter: user_id: int value of specific user
+    response:
+       list of user's chats
+'''
 @app.route('/api/chats/<int:user_id>', methods=['GET'])
 def get_user_chats(user_id):
     try:
@@ -50,6 +82,13 @@ def get_user_chats(user_id):
     except Exception as error:
         return abort(500, description=f'Failed to fetch chats: {error}')
 
+'''
+ this api will will give us an information of given user's id contacts from our database
+    Method: GET
+    parameter: user_id: int value of specific user
+    response:
+       list of user's contacts
+'''
 @app.route('/api/contacts/<int:user_id>', methods=['GET'])
 def get_user_contacts(user_id):
     try:
@@ -63,7 +102,14 @@ def get_user_contacts(user_id):
         return jsonify(contacts)
     except Exception as error:
         return abort(500, description=f'Failed to fetch contacts: {error}')
-    
+
+'''
+ this api will will give us an information of given user's id contacts from our database
+    Method: GET
+    parameter: user_id: int value of specific user
+    response:
+       list of user's contacts
+'''    
 @app.route('/api/chat/messages/<int:chat_id>', methods=['GET'])
 def get_chat_messages(chat_id):
     try:
@@ -72,6 +118,12 @@ def get_chat_messages(chat_id):
     except Exception as error:
         return abort(500, description=f'Failed to fetch chat messages: {error}')
 
+'''
+ this api will will give us a list of groups
+    Method: GET
+    response:
+       list of groups
+'''    
 @app.route('/api/groups', methods=['GET'])
 def get_all_groups():
     try:
@@ -80,6 +132,13 @@ def get_all_groups():
     except Exception as error:
         return abort(500, description=f'Failed to fetch groups: {error}')
 
+'''
+ this api will will give us an information of given group's id messages from our database
+    Method: GET
+    parameter: group_id: int value of specific group
+    response:
+       list of group_id's messages
+'''   
 @app.route('/api/group/<int:group_id>/messages', methods=['GET'])
 def get_group_messages(group_id):
     try:
@@ -108,6 +167,19 @@ def insert_query():
         return jsonify({'message': 'query executed correctly'}), 200
     except Exception as error:
         return abort(500, description=f'failed to execute insert query: {error}')
+
+@app.route('/api/delete/', methods=['POST'])
+def delete_query():
+    data = request.get_json()  # Get data from request body
+    query = data.get('query')
+    if not query:
+        return jsonify({'message': 'there is no query provided!'}), 400
+
+    try:
+        postgresService.query_handler(query=query)
+        return jsonify({'message': 'query executed correctly'}), 200
+    except Exception as error:
+        return abort(500, description=f'failed to execute delete query: {error}')
 
 @app.route('/api/update/', methods=['POST'])
 def update_query():
