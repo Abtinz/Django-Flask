@@ -147,6 +147,13 @@ def get_group_messages(group_id):
     except Exception as error:
         return abort(500, description=f'Failed to fetch group messages: {error}')
 
+'''
+ this api will will give us an information of given group's id users from our database
+    Method: GET
+    parameter: group_id: int value of specific group
+    response:
+       list of group_id's users
+'''   
 @app.route('/api/group/<int:group_id>/users', methods=['GET'])
 def get_group_users(group_id):
     try:
