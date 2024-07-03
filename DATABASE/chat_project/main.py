@@ -1,4 +1,3 @@
-import json
 from flask import Flask, abort, request, jsonify
 
 from postgres import PostgresService
