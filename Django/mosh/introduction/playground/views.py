@@ -14,3 +14,6 @@ def say_hello(request):
         content= json.dumps(response_data), 
         content_type="application/json"
     )
+
+def say_hello_html(request):
+    return render(request,'hello.html', {'response': 'Hello again old friend!'})
