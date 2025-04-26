@@ -10,7 +10,7 @@ class Collection(models.Model):
         'Product', on_delete=models.SET_NULL, null=True, related_name='+')
     #note :  related_name='+' -> will help us to avoid from conflicts after building reverse relation in products class
 
-class Product(models):
+class Product(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     price = models.DecimalField(max_digits= 6,decimal_places=2)
@@ -19,7 +19,7 @@ class Product(models):
     collection = models.ForeignKey(Collection, on_delete=models.PROTECT)
     promotions = models.ManyToManyField(Promotion)
 
-class Customer(models):
+class Customer(models.Model):
 
     MEMBERSHIP_DEFAULT = "B"
     MEMBERSHIP_CHOICES = [
@@ -35,7 +35,7 @@ class Customer(models):
     birth_date = models.DateField(null=True)
     membership = models.CharField(max_length=1, choices=MEMBERSHIP_CHOICES, default= MEMBERSHIP_DEFAULT)
 
-class Order(models):
+class Order(models.Model):
 
     ORDER_STATUS_DEFAULT = "p"
     ORDER_STATUS_POSSIBLE_STATES = [
