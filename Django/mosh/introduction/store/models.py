@@ -8,3 +8,10 @@ class Product(models):
     price = models.DecimalField(max_digits= 6,decimal_places=2)
     inventory = models.IntegerField()
     last_update = models.DateTimeField(auto_now=True)
+
+class Customers(models):
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+    email = models.EmailField(unique = True)
+    phone = models.CharField(max_length=25)
+    birth_date = models.DateField(null=True)
