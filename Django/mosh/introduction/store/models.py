@@ -37,3 +37,8 @@ class Order(models):
     placed_at = models.DateTimeField(auto_now_add=True)
     membership = models.CharField(max_length=1, choices=ORDER_STATUS_POSSIBLE_STATES, default= ORDER_STATUS_DEFAULT)
 
+class Address(models.Model):
+    street = models.CharField(max_length=255)
+    city = models.CharField(max_length=255)
+    #one to many relationship by declaring customer as a foreign key for address entity to the Django(we have multiple addresses for one user)
+    customer = models.ForeignKey( Customer, on_delete=models.CASCADE)
