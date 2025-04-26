@@ -1,8 +1,7 @@
 from django.db import models
 
-# Create your models here.
 class Collection(models.Model):
-    name = models.CharField(max_length=255)
+    title = models.CharField(max_length=255)
 
 class Product(models):
     title = models.CharField(max_length=255)
@@ -10,7 +9,7 @@ class Product(models):
     price = models.DecimalField(max_digits= 6,decimal_places=2)
     inventory = models.IntegerField()
     last_update = models.DateTimeField(auto_now=True)
-    collection = models.ForeignKey(Collection, on_delete=models.CASCADE)
+    collection = models.ForeignKey(Collection, on_delete=models.PROTECT)
 
 class Customer(models):
 
@@ -39,14 +38,21 @@ class Order(models):
 
     placed_at = models.DateTimeField(auto_now_add=True)
     membership = models.CharField(max_length=1, choices=ORDER_STATUS_POSSIBLE_STATES, default= ORDER_STATUS_DEFAULT)
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    customer = models.ForeignKey(Customer, on_delete=models.PROTECT)
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.PROTECT)
+    product = models.ForeignKey(Product, on_delete=models.PROTECT)
+    quantity = models.PositiveSmallIntegerField()
+    #Why we have a repetitive price of product for each order item? because product's prices can get changed by the time, we need to keep a constant value for user 
+    #who had added the product before its getting alternations
+    unit_price = models.DecimalField(max_digits=6, decimal_places=2)
 
 class Address(models.Model):
     street = models.CharField(max_length=255)
     city = models.CharField(max_length=255)
     #one to many relationship by declaring customer as a foreign key for address entity to the Django(we have multiple addresses for one user)
     customer = models.ForeignKey( Customer, on_delete=models.CASCADE)
-
 
 class Cart(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
