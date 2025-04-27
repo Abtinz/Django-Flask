@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from store.models import Product
+from decimal import Decimal, InvalidOperation
 import json
 
 def say_hello(request):
@@ -58,6 +59,44 @@ def products_by_id(request):
         {
             "response": f"product id – {product_id}",
             "product": str(product), 
+            "status_code": 200,
+        }
+    )
+
+def expensive_products(request):
+    """
+    GET /products/?price_threshold=20
+    Returns every product whose unit_price exceeds the value supplied in
+    the `price_threshold` query-string parameter.
+    """
+
+    raw_threshold = request.GET.get("price_threshold")
+    if raw_threshold is None:
+        return JsonResponse({"error": "`price_threshold` is required"}, status=400)
+
+    try:
+        threshold = Decimal(raw_threshold)
+    except InvalidOperation:
+        return JsonResponse(
+            {"error": "`price_threshold` must be a numeric value"}, status=400
+        )
+
+    products_qs = Product.objects.filter(unit_price__gt=threshold)
+
+    products = list(
+        products_qs.values("id", "title", "unit_price")
+    ) 
+
+    if not products:
+        return JsonResponse(
+            {"error": f"No products cost more than {threshold}"}, status=404
+        )
+
+    return JsonResponse(
+        {
+            "price_threshold": str(threshold),
+            "count": len(products),
+            "products": products,
             "status_code": 200,
         }
     )
