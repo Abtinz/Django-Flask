@@ -18,6 +18,8 @@ from django.contrib import admin
 from django.urls import path, include
 from debug_toolbar.toolbar import debug_toolbar_urls
 
+admin.sites.site.site_header = "Store Project - Django with Mosh - Admin Panel"
+admin.sites.site.index_title = "Admin - 01"
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("playground/", include("playground.urls"))
