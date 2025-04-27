@@ -36,6 +36,13 @@ class Collection(models.Model):
         related_name='+'
     )  # note: related_name='+' -> will help us to avoid from conflicts ...
 
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        ordering = ["title"]
+        
+
 
 class Product(models.Model):
     """
@@ -59,6 +66,11 @@ class Product(models.Model):
     collection = models.ForeignKey(Collection, on_delete=models.PROTECT)
     promotions = models.ManyToManyField(Promotion)
 
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        ordering = ["title"]
 
 class Customer(models.Model):
     """
@@ -87,7 +99,11 @@ class Customer(models.Model):
         default=MEMBERSHIP_DEFAULT
     )
 
+    def __str__(self):
+        return self.email
+
     class Meta:
+        ordering = ["first_name"]
         db_table = "store_customer"
         indexes = [
             models.Index(fields=['last_name', 'first_name'])
@@ -115,6 +131,7 @@ class Order(models.Model):
         choices=ORDER_STATUS_POSSIBLE_STATES,
         default=ORDER_STATUS_DEFAULT
     )
+
     customer = models.ForeignKey(Customer, on_delete=models.PROTECT)
 
 
