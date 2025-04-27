@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
-from store.models import Product
+from store.models import Product, OrderItem
 from django.db.models import Q
 from decimal import Decimal, InvalidOperation
 import json
@@ -35,6 +35,30 @@ def all_products(request):
     return HttpResponse(
         content= json.dumps(response_data), 
         content_type="application/json"
+    )
+
+def ordered_products(request):
+
+    query_set = OrderItem.objects.order_by("-product__title").distinct().values("product__title","product__unit_price","product__inventory","product__collection")
+
+    products = list(query_set)
+
+    if not products:
+        return JsonResponse(
+            {
+                "error": (
+                    f"No products have been ordered yet!"
+                )
+            },
+            status=404
+        )
+
+    return JsonResponse(
+        {
+            "count": len(products),
+            "products": products,
+            "status_code": 200
+        }
     )
 
 def products_by_id(request):
@@ -180,7 +204,7 @@ def expensive_low_stock(request):
     products_qs = Product.objects.filter(
         unit_price__gt=min_price,
         inventory__lt=max_inventory,
-    ).order_by("unit_price").values("id", "title", "unit_price", "inventory")    
+    ).order_by("unit_price").values("id", "title", "unit_price", "inventory", "collection__title")    
 
     products = list(products_qs)
 
