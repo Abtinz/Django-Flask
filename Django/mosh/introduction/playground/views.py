@@ -151,5 +151,59 @@ def range_of_prices(request):
         }
     )
 
+def expensive_low_stock(request):
+    """
+    GET /products/check/?min_price=50&max_inventory=10
+    Returns every product whose:
+        • unit_price  >  min_price
+        • inventory   <  max_inventory
+    """
+
+    raw_price = request.GET.get("min_price")
+    raw_stock = request.GET.get("max_inventory")
+
+    if raw_price is None or raw_stock is None:
+        return JsonResponse(
+            {"error": "min_price and max_inventory are required"}, status=400
+        )
+
+    try:
+        min_price = Decimal(raw_price)
+        max_inventory = int(raw_stock)
+    except (InvalidOperation, ValueError):
+        return JsonResponse(
+            {"error": "Both query parameters must be numeric"}, status=400
+        )
+
+    #complex query with filters
+    products_qs = Product.objects.filter(
+        unit_price__gt=min_price,
+        inventory__lt=max_inventory,
+    ).order_by("unit_price")          
+
+    products = list(products_qs.values("id", "title", "unit_price", "inventory"))
+
+    if not products:
+        return JsonResponse(
+            {
+                "error": (
+                    f"No products cost more than {min_price} and have inventory "
+                    f"under {max_inventory}"
+                )
+            },
+            status=404,
+        )
+
+    return JsonResponse(
+        {
+            "min_price": str(min_price),
+            "max_inventory": max_inventory,
+            "count": len(products),
+            "products": products,
+            "status_code": 200,
+        }
+    )
+
+
 def say_hello_html(request):
     return render(request,'hello.html', {'response': 'Hello again old friend!'})
