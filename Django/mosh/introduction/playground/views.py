@@ -101,5 +101,55 @@ def expensive_products(request):
         }
     )
 
+
+def range_of_prices(request):
+    """
+    GET /products/range/?min_price=40&max_price=50
+    Returns every product whose unit_price lies within the inclusive
+    [min_price, max_price] range supplied in the query-string.
+    """
+
+    raw_min = request.GET.get("min_price")
+    raw_max = request.GET.get("max_price")
+
+    if raw_min is None or raw_max is None:
+        return JsonResponse(
+            {"error": "`min_price` and `max_price` query parameters are required"},
+            status=400,
+        )
+
+    try:
+        min_price = Decimal(raw_min)
+        max_price = Decimal(raw_max)
+    except InvalidOperation:
+        return JsonResponse(
+            {"error": "Both `min_price` and `max_price` must be numeric values"},
+            status=400,
+        )
+
+    if min_price > max_price:
+        return JsonResponse(
+            {"error": "`min_price` cannot be greater than `max_price`"}, status=400
+        )
+
+    products_qs = Product.objects.filter(
+        unit_price__range = (min_price,max_price)
+    ).order_by("unit_price")   
+
+    products = list(products_qs.values("id", "title", "unit_price"))
+
+    if not products:
+        return JsonResponse({"error": f"No products found in the {min_price}–{max_price} price range"},status=404)
+
+    return JsonResponse(
+        {
+            "min_price": str(min_price),
+            "max_price": str(max_price),
+            "count": len(products),
+            "products": products,
+            "status_code": 200
+        }
+    )
+
 def say_hello_html(request):
     return render(request,'hello.html', {'response': 'Hello again old friend!'})
