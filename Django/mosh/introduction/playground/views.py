@@ -180,9 +180,9 @@ def expensive_low_stock(request):
     products_qs = Product.objects.filter(
         unit_price__gt=min_price,
         inventory__lt=max_inventory,
-    ).order_by("unit_price")          
+    ).order_by("unit_price").values("id", "title", "unit_price", "inventory")    
 
-    products = list(products_qs.values("id", "title", "unit_price", "inventory"))
+    products = list(products_qs)
 
     if not products:
         return JsonResponse(
