@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from store.models import Product, OrderItem
 from django.db.models import Q
+from django.db.models import Min, Max, Avg, Count
 from decimal import Decimal, InvalidOperation
 import json
 
@@ -125,7 +126,6 @@ def expensive_products(request):
             "status_code": 200,
         }
     )
-
 
 def range_of_prices(request):
     """
@@ -280,6 +280,37 @@ def cheap_plenty_stock(request):
             "status_code": 200,
         }
     )
+
+
+def unit_price_stats(request):
+    """
+    GET /products/statistics/
+    Returns min, max, and average unit_price across *all* products.
+    """
+    statistics = Product.objects.aggregate(
+        count = Count("id"),
+        min_price=Min("unit_price"),
+        max_price=Max("unit_price"),
+        avg_price=Avg("unit_price"),
+    )
+
+    
+    if all(value is None for value in statistics.values()):
+        return JsonResponse(
+            {"error": "No products has been added to database until now, we cannot show and compute required statistics"}, 
+            status=404
+        )
+
+    # Convert Decimal / None to strings for JSON-safe output
+    response_data = {
+        "product counts": str(statistics["count"]) if statistics["count"] is not None else None,
+        "min_price": str(statistics["min_price"]) if statistics["min_price"] is not None else None,
+        "max_price": str(statistics["max_price"]) if statistics["max_price"] is not None else None,
+        "avg_price": str(statistics["avg_price"]) if statistics["avg_price"] is not None else None,
+        "status_code": 200,
+    }
+
+    return JsonResponse(response_data)
 
 def say_hello_html(request):
     return render(request,'hello.html', {'response': 'Hello again old friend!'})
