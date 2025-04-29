@@ -281,7 +281,6 @@ def cheap_plenty_stock(request):
         }
     )
 
-
 def unit_price_stats(request):
     """
     GET /products/statistics/
@@ -308,6 +307,47 @@ def unit_price_stats(request):
         "max_price": str(statistics["max_price"]) if statistics["max_price"] is not None else None,
         "avg_price": str(statistics["avg_price"]) if statistics["avg_price"] is not None else None,
         "status_code": 200,
+    }
+
+    return JsonResponse(response_data)
+
+def collection_price_stats(request):
+    """
+    GET /products/collection-stats/?collection_title=<name>
+    Filters products by `collection_title` (case-insensitive) and then returns
+    min, max, and average unit_price for that subset.
+    """
+
+    collection_title = request.GET.get("collection_title")
+    if collection_title is None:
+        return JsonResponse(
+            {"error": "bad request: collection_title query parameter is required"}, 
+            status=400
+        )
+
+    qs = Product.objects.filter(collection__title__iexact=collection_title.strip())
+
+    if not qs.exists():
+        return JsonResponse(
+            {"error": f"No products found in collection {collection_title}"},
+            status=404
+        )
+
+    stats = qs.aggregate(
+        count = Count("id"),
+        min_price=Min("unit_price"),
+        max_price=Max("unit_price"),
+        avg_price=Avg("unit_price")
+    )
+
+    response_data = {
+        "collection_title": collection_title,
+        "count": str(stats["count"]),
+        "min_price": str(stats["min_price"]),
+        "max_price": str(stats["max_price"]),
+        "avg_price": str(stats["avg_price"]),
+        "product_count": qs.count(),
+        "status_code": 200
     }
 
     return JsonResponse(response_data)
