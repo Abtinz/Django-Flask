@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
-from store.models import Product, OrderItem, Collection
+from store.models import Order, Product, OrderItem, Collection
 from django.db.models import F, Value, IntegerField #annotation
 from django.db.models import Q 
 from django.db.models import Min, Max, Avg, Count #aggregation
+from django.db import transaction #transactions -> atomic
 from decimal import Decimal, InvalidOperation
 import json
 
@@ -439,6 +440,63 @@ def update_collection(request):
             "status_code": 200
         }, status=200
     )
+
+@transaction.atomic()
+def new_order(request):
+    
+    with transaction.atomic():
+        """
+        GET /order/new/
+        this endpoint function will implement insert sql command using ORM for orders in atomic way!
+        """
+
+        customer_id = request.GET.get("customer_id")
+        product_id = request.GET.get("product_id")
+        product_quantity = request.GET.get("product_quantity")
+
+
+        if product_id is None or product_quantity is None or customer_id is None:
+            return JsonResponse(
+                {"error": "bad request: collection_id and product_id and featured_product are query parameters and required"}, 
+                status=400
+            )
+
+        
+        product_price = Product.objects.filter(pk=int(product_id)).values("unit_price")
+        
+
+        if product_price is None:
+            return JsonResponse(
+                {"error": "bad request: no product with this given id has found"}, 
+                status=400
+            )
+        
+        print(product_price[0]["unit_price"])
+        order_price = int(product_price[0]["unit_price"]) * int(product_quantity)
+
+        
+
+        order = Order()
+        order.customer_id = int(customer_id)
+        order.save()
+
+        orderItem = OrderItem()
+        orderItem.order = order
+        orderItem.product = Product(pk = int(product_id))
+        orderItem.quantity = int(product_quantity)
+        orderItem.unit_price = order_price
+    
+        orderItem.save()
+        
+        if orderItem is None:
+            return JsonResponse({"error": "Server Error"}, status=500)
+
+        return JsonResponse(
+            {
+                "new collection": str(orderItem),
+                "status_code": 200
+            }, status=200
+        )
 
 def say_hello_html(request):
     return render(request,'hello.html', {'response': 'Hello again old friend!'})

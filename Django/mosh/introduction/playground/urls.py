@@ -15,5 +15,6 @@ urlpatterns = [
     path("products/union/id/",views.products_union_id,name="products union id"),
     path("collection/add/",views.new_collection,name="new collection"),
     path("collection/update/",views.update_collection,name="new collection"),
+    path("order/new/",views.new_order,name="new collection"),
     path(route = "hello/html/debug/", view=views.say_hello_html, name="hello django + html + debug")
 ]
