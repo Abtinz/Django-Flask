@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
-from store.models import Product, OrderItem
-from django.db.models import Q
-from django.db.models import Min, Max, Avg, Count
+from store.models import Product, OrderItem, Collection
+from django.db.models import F, Value, IntegerField #annotation
+from django.db.models import Q 
+from django.db.models import Min, Max, Avg, Count #aggregation
 from decimal import Decimal, InvalidOperation
 import json
 
@@ -351,6 +352,93 @@ def collection_price_stats(request):
     }
 
     return JsonResponse(response_data)
+
+def products_union_id(request):
+    """
+    GET /products/union/id/
+    Adds 10 080 to every product’s primary-key and returns both the original
+    `id` and the computed `new_id`.  (10 080 = 7 days × 24 h × 60 min,
+    if you are wondering about the offset.)
+    """
+
+    products_qs = (
+        Product.objects.annotate(new_id=F("id") + Value(10080, output_field=IntegerField()))
+        .values("new_id", "title","unit_price","collection")
+        .order_by("new_id")
+    )
+
+    products = list(products_qs)
+
+    if not products:
+        return JsonResponse({"error": "No products in database"}, status=404)
+
+    return JsonResponse(
+        {
+            "products": products,
+            "status_code": 200
+        }, status=200
+    )
+
+def new_collection(request):
+    """
+    GET /collection/add/
+    this endpoint function will implement insert sql command using ORM for collections
+    """
+
+    collection_title = request.GET.get("collection_title")
+    featured_product = request.GET.get("featured_product")
+
+    if collection_title is None or featured_product is None:
+        return JsonResponse(
+            {"error": "bad request: collection_title and featured_product query parameter is required"}, 
+            status=400
+        )
+    
+    product = Product(pk=int(featured_product))
+    
+    query_set = Collection.objects.create(title = collection_title ,featured_product= product)
+
+    if query_set is None:
+        return JsonResponse({"error": "Server Error"}, status=500)
+
+    return JsonResponse(
+        {
+            "new collection": str(query_set),
+            "status_code": 200
+        }, status=200
+    )
+
+
+def update_collection(request):
+    """
+    GET /collection/update/
+    this endpoint function will implement insert sql command using ORM for collections
+    """
+
+    collection_id = request.GET.get("collection_id")
+    collection_title = request.GET.get("collection_title")
+    featured_product = request.GET.get("featured_product")
+
+    if collection_title is None or featured_product is None or collection_id is None:
+        return JsonResponse(
+            {"error": "bad request: collection_id and collection_title and featured_product are query parameters and required"}, 
+            status=400
+        )
+    
+
+    product = Product(pk=int(featured_product)) if featured_product != "None" else None
+    
+    query_set = Collection.objects.filter(pk=int(collection_id)).update(title = collection_title ,featured_product= product)
+
+    if query_set is None:
+        return JsonResponse({"error": "Server Error"}, status=500)
+
+    return JsonResponse(
+        {
+            "new collection": str(query_set),
+            "status_code": 200
+        }, status=200
+    )
 
 def say_hello_html(request):
     return render(request,'hello.html', {'response': 'Hello again old friend!'})
