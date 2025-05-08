@@ -22,5 +22,6 @@ admin.sites.site.site_header = "Store Project - Django with Mosh - Admin Panel"
 admin.sites.site.index_title = "Admin - 01"
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("playground/", include("playground.urls"))
+    path("playground/", include("playground.urls")),
+    path("store/", include("store.urls"))
 ] + debug_toolbar_urls()

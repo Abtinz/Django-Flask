@@ -521,8 +521,5 @@ def tags_generic_content_type(request):
         }
     )
 
-
-    
-
 def say_hello_html(request):
     return render(request,'hello.html', {'response': 'Hello again old friend!'})
