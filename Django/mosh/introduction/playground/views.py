@@ -1,11 +1,13 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from store.models import Order, Product, OrderItem, Collection
+from tags.models import TagItem
 from django.db.models import F, Value, IntegerField #annotation
 from django.db.models import Q 
 from django.db.models import Min, Max, Avg, Count #aggregation
 from django.db import transaction #transactions -> atomic
 from decimal import Decimal, InvalidOperation
+from django.contrib.contenttypes.models import ContentType
 import json
 
 def say_hello(request):
@@ -409,7 +411,6 @@ def new_collection(request):
         }, status=200
     )
 
-
 def update_collection(request):
     """
     GET /collection/update/
@@ -497,6 +498,31 @@ def new_order(request):
                 "status_code": 200
             }, status=200
         )
+
+def tags_generic_content_type(request):
+
+    content_type = ContentType.objects.get_for_model(Product)
+
+
+    query_set = TagItem.objects \
+        .select_related('tag') \
+        .filter(
+            content_type=content_type,
+            object_id = 1
+        )
+    
+    tags = list(query_set)
+    
+    return JsonResponse(
+        {
+            "count": len(tags),
+            "tags": tags,
+            "status_code": 200
+        }
+    )
+
+
+    
 
 def say_hello_html(request):
     return render(request,'hello.html', {'response': 'Hello again old friend!'})
