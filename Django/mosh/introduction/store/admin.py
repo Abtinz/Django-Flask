@@ -7,6 +7,7 @@ from .models import Customer, OrderItem, Collection, Product
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ['title', 'unit_price', 'inventory_status']
+    list_filter = ['collection', 'last_update', 'inventory']
     list_editable = ['unit_price']
 
     @admin.display(ordering="inventory")
