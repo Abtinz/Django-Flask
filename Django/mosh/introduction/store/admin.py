@@ -35,5 +35,10 @@ class CollectionAdmin(admin.ModelAdmin):
                 products_count = models.Count('product')
             )
 
-admin.site.register(Customer)
+@admin.register(Customer)
+class CustomerAdmin(admin.ModelAdmin):
+    list_display = ['first_name', 'last_name', 'membership']
+    list_editable = ['membership']
+    search_fields = ['first_name', 'last_name', 'membership']
+
 admin.site.register(OrderItem)
