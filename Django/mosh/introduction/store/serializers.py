@@ -74,21 +74,13 @@ class ProductUpdateModelSerializer(serializers.ModelSerializer):
     """
     Used for PUT / PATCH requests on a single product.
     Mirrors the writable fields of ProductPostModelSerializer but
-    overrides `update()` so we can replace the many-to-many
-    `promotions` relation cleanly.
+    overrides update() so we can replace the many-to-many
+    promotions relation cleanly. (in future ...)
     """
     
     class Meta:
         model = Product
-        fields = [
-            'id',
-            'title',
-            'slug',
-            'description',
-            'unit_price',
-            'inventory',
-            'collection'
-        ]
+        fields = ['id','title','slug','description','unit_price','inventory','collection']
 
     def update(self, instance, validated_data):
         instance = super().update(instance, validated_data)
