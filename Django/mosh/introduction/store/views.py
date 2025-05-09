@@ -14,18 +14,15 @@ from .serializers import ProductSerializer
 
 @api_view()
 def all_products(request):
+    """
+    Return the a list of all present products in the database
+    URL : ./store/products/all/
+    """
+    queryset = Product.objects.all()
 
-    query_set = Product.objects.all()
+    serializer = ProductSerializer(queryset, many =True)
 
-    products = list(query_set)
-
-    response_data = {
-        "response": "products list!",
-        "products": f"{products}",
-        "status_code": "200"
-    }
-
-    return Response(response_data)
+    return Response(serializer.data)
 
 def ordered_products(request):
 
