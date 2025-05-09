@@ -12,19 +12,35 @@ from rest_framework.response import Response
 from rest_framework import status
 from .serializers import ProductModelSerializer, ProductSerializer, ProductsCollectionSerializer
 
-@api_view()
+@api_view(['GET','POST'])
 def all_products(request):
-    """
-    Return the a list of all present products in the database
-    URL : ./store/products/all/
-    """
-    queryset = Product.objects\
-        .select_related('collection')\
-        .all()
+    if request.method == 'GET':
+        """
+        Return the a list of all present products in the database
+        post: will create a new product
+        URL : ./store/products/all/
+        """
+        queryset = Product.objects\
+            .select_related('collection')\
+            .all()
 
-    serializer = ProductModelSerializer(queryset, many =True)
+        serializer = ProductModelSerializer(queryset, many =True)
 
-    return Response(serializer.data)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        
+        serializer = ProductModelSerializer(data= request.data)
+        if serializer.is_valid():
+            return Response(serializer.data)
+        else:
+            return Response(
+                data= serializer.errors, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        #serializer = ProductModelSerializer(queryset, many =True)
+
+        
 
 @api_view()
 def products_collection(request):
