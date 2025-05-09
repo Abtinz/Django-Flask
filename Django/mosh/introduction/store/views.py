@@ -10,7 +10,7 @@ from django.contrib.contenttypes.models import ContentType
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import ProductSerializer
+from .serializers import ProductSerializer, ProductsCollectionSerializer
 
 @api_view()
 def all_products(request):
@@ -18,11 +18,44 @@ def all_products(request):
     Return the a list of all present products in the database
     URL : ./store/products/all/
     """
-    queryset = Product.objects.all()
+    queryset = Product.objects\
+        .select_related('collection')\
+        .all()
 
     serializer = ProductSerializer(queryset, many =True)
 
     return Response(serializer.data)
+
+@api_view()
+def products_collection(request):
+    """
+    Return the product's collection whose primary-key is supplied through the `id`
+    query parameter, e.g.  GET /products/collection/?id=1
+    """
+    product_id = request.GET.get("id")
+
+    if not product_id:
+        return Response(
+            {"error": "`id` query parameter is required"}, 
+            status = status.HTTP_400_BAD_REQUEST
+        )
+
+    try:
+
+        collection = Product.objects\
+            .select_related('collection')\
+            .get(pk=product_id)
+        serializer = ProductsCollectionSerializer(collection)
+        return Response(
+            serializer.data.get(),
+            status= status.HTTP_200_OK
+        )
+
+    except Product.DoesNotExist:
+        return Response(
+            {"error": f"Product with id {product_id} not found"}, 
+            status=status.HTTP_404_NOT_FOUND
+        )
 
 def ordered_products(request):
 
@@ -74,7 +107,6 @@ def products_by_id(request):
             {"error": f"Product with id {product_id} not found"}, 
             status=status.HTTP_404_NOT_FOUND
         )
-
 
 def expensive_products(request):
     """
