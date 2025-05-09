@@ -9,8 +9,8 @@ from decimal import Decimal, InvalidOperation
 from django.contrib.contenttypes.models import ContentType
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-
-import json
+from rest_framework import status
+from .serializers import ProductSerializer
 
 @api_view()
 def all_products(request):
@@ -51,6 +51,7 @@ def ordered_products(request):
         }
     )
 
+@api_view()
 def products_by_id(request):
     """
     Return the product whose primary-key is supplied through the `id`
@@ -58,25 +59,25 @@ def products_by_id(request):
     """
 
     product_id = request.GET.get("id")
+
     if not product_id:
-        return JsonResponse(
-            {"error": "`id` query parameter is required"}, status=400
+        return Response(
+            {"error": "`id` query parameter is required"}, 
+            status = status.HTTP_400_BAD_REQUEST
         )
 
     try:
-        product = Product.objects.get(id=product_id)
+
+        product = Product.objects.get(pk=product_id)
+        serializer = ProductSerializer(product)
+        return Response(serializer.data)
+
     except Product.DoesNotExist:
-        return JsonResponse(
-            {"error": f"Product with id {product_id} not found"}, status=404
+        return Response(
+            {"error": f"Product with id {product_id} not found"}, 
+            status=status.HTTP_404_NOT_FOUND
         )
 
-    return JsonResponse(
-        {
-            "response": f"product id – {product_id}",
-            "product": str(product), 
-            "status_code": 200,
-        }
-    )
 
 def expensive_products(request):
     """
