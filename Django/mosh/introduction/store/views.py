@@ -10,7 +10,7 @@ from django.contrib.contenttypes.models import ContentType
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import ProductModelSerializer, ProductPostModelSerializer, ProductSerializer, ProductsCollectionSerializer
+from .serializers import ProductModelSerializer, ProductPostModelSerializer, ProductSerializer, ProductUpdateModelSerializer, ProductsCollectionSerializer
 
 @api_view(['GET','POST'])
 def all_products(request):
@@ -38,10 +38,38 @@ def all_products(request):
             ProductPostModelSerializer(product).data,
             status=status.HTTP_201_CREATED
         )
-       
-            
 
-        #serializer = ProductModelSerializer(queryset, many =True)
+@api_view(['GET', 'PUT', 'PATCH', 'DELETE'])
+def product_detail(request, pk):
+    """
+    Endpoint:  ./store/products/<int:pk>/
+
+    GET     → retrieve a single product
+    PUT     → full update (all required fields)
+    PATCH   → partial update (only changed fields)
+    DELETE  → hard-delete the row
+    """
+    try:
+        product = Product.objects.select_related('collection').get(pk=pk)
+    except Product.DoesNotExist:
+        return Response({'detail': 'Not found.'},
+                        status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = ProductModelSerializer(product)
+        return Response(serializer.data)
+
+    if request.method in ['PUT', 'PATCH']:
+        partial = request.method == 'PATCH'
+        serializer = ProductUpdateModelSerializer(
+            product, data=request.data, partial=partial
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+    
+    product.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
 
 @api_view()
 def products_collection(request):

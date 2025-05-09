@@ -68,3 +68,28 @@ class ProductPostModelSerializer(serializers.ModelSerializer):
         Return unit_price * 1.10  (i.e. add 10 % tax).
         """
         return product.unit_price * Decimal('1.10')
+    
+
+class ProductUpdateModelSerializer(serializers.ModelSerializer):
+    """
+    Used for PUT / PATCH requests on a single product.
+    Mirrors the writable fields of ProductPostModelSerializer but
+    overrides `update()` so we can replace the many-to-many
+    `promotions` relation cleanly.
+    """
+    
+    class Meta:
+        model = Product
+        fields = [
+            'id',
+            'title',
+            'slug',
+            'description',
+            'unit_price',
+            'inventory',
+            'collection'
+        ]
+
+    def update(self, instance, validated_data):
+        instance = super().update(instance, validated_data)
+        return instance
