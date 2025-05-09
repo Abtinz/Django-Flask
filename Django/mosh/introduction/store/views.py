@@ -10,7 +10,7 @@ from django.contrib.contenttypes.models import ContentType
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import ProductSerializer, ProductsCollectionSerializer
+from .serializers import ProductModelSerializer, ProductSerializer, ProductsCollectionSerializer
 
 @api_view()
 def all_products(request):
@@ -22,7 +22,7 @@ def all_products(request):
         .select_related('collection')\
         .all()
 
-    serializer = ProductSerializer(queryset, many =True)
+    serializer = ProductModelSerializer(queryset, many =True)
 
     return Response(serializer.data)
 

@@ -26,3 +26,20 @@ class ProductSerializer(serializers.Serializer):
         ''' This serializable method will implement taz calculation over serialized product's unit_price
         '''
         return product.unit_price * Decimal(1.15)
+    
+class ProductModelSerializer(serializers.ModelSerializer):
+    '''This is a product's model serializer class for GET method(a simple test for getting a list of products in django-rest-framework)'''
+
+    class Meta:
+        model = Product
+        fields = ['id','title', 'collection', 'price', 'price_with_tax','inventory', 'last_update']
+    
+    #source and renaming in serializers
+    price = serializers.DecimalField(max_digits=6, decimal_places=2,source= 'unit_price')
+    price_with_tax = serializers.SerializerMethodField(method_name='calculate_tax')
+    collection = CollectionSerializer()
+
+    def calculate_tax(self, product:Product):
+        ''' This serializable method will implement taz calculation over serialized product's unit_price
+        '''
+        return product.unit_price * Decimal(1.15)
