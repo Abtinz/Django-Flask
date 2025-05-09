@@ -10,7 +10,7 @@ from django.contrib.contenttypes.models import ContentType
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import ProductModelSerializer, ProductSerializer, ProductsCollectionSerializer
+from .serializers import ProductModelSerializer, ProductPostModelSerializer, ProductSerializer, ProductsCollectionSerializer
 
 @api_view(['GET','POST'])
 def all_products(request):
@@ -29,18 +29,19 @@ def all_products(request):
         return Response(serializer.data)
     elif request.method == 'POST':
         
-        serializer = ProductModelSerializer(data= request.data)
-        if serializer.is_valid():
-            return Response(serializer.data)
-        else:
-            return Response(
-                data= serializer.errors, 
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
-        #serializer = ProductModelSerializer(queryset, many =True)
+        serializer = ProductPostModelSerializer(data= request.data)
+        serializer.is_valid( raise_exception=True)
 
         
+        product = serializer.save()              
+        return Response(
+            ProductPostModelSerializer(product).data,
+            status=status.HTTP_201_CREATED
+        )
+       
+            
+
+        #serializer = ProductModelSerializer(queryset, many =True)
 
 @api_view()
 def products_collection(request):
