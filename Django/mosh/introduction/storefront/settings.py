@@ -136,3 +136,9 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+#This definition will help serializers and rest framework to return a decimal and float value except of string one!
+REST_FRAMEWORK = {
+    'COERCE_DECIMAL_TO_STRING'
+}
+
