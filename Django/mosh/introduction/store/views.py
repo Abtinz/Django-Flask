@@ -10,7 +10,7 @@ from django.contrib.contenttypes.models import ContentType
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import ProductModelSerializer, ProductPostModelSerializer, ProductSerializer, ProductUpdateModelSerializer, ProductsCollectionSerializer
+from .serializers import OrderedItemModelSerializer, ProductModelSerializer, ProductPostModelSerializer, ProductSerializer, ProductUpdateModelSerializer, ProductsCollectionSerializer
 
 @api_view(['GET','POST'])
 def all_products(request):
@@ -102,30 +102,6 @@ def products_collection(request):
             status=status.HTTP_404_NOT_FOUND
         )
 
-def ordered_products(request):
-
-    query_set = OrderItem.objects.order_by("-product__title").distinct().values("product__title","product__unit_price","product__inventory","product__collection")
-
-    products = list(query_set)
-
-    if not products:
-        return JsonResponse(
-            {
-                "error": (
-                    f"No products have been ordered yet!"
-                )
-            },
-            status=404
-        )
-
-    return JsonResponse(
-        {
-            "count": len(products),
-            "products": products,
-            "status_code": 200
-        }
-    )
-
 @api_view()
 def products_by_id(request):
     """
@@ -152,6 +128,27 @@ def products_by_id(request):
             {"error": f"Product with id {product_id} not found"}, 
             status=status.HTTP_404_NOT_FOUND
         )
+
+@api_view()
+def ordered_products(request):
+
+    queryset = OrderItem.objects\
+        .select_related('order','product','product__collection')\
+        .order_by("-product__title")\
+        .distinct()
+
+    products = OrderedItemModelSerializer(queryset, many =True)
+
+    if not products.data:
+        return Response({"error": ( f"No products have been ordered yet!")},status=status.HTTP_404_NOT_FOUND)
+
+    return Response(
+        data={
+            "count": len(products.data),
+            "products": products.data
+        },
+        status=status.HTTP_200_OK
+    )
 
 def expensive_products(request):
     """

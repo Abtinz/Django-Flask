@@ -1,12 +1,17 @@
 from decimal import Decimal
 from rest_framework import serializers
-from .models import Product
+from .models import Order, OrderItem, Product
 
 class CollectionSerializer(serializers.Serializer):
     '''This is collection serializer for GET method(a simple test for getting a list of products in django-rest-framework)\n
     we will use this serializer aim to show relational collection object in products view! collection = {id and title}'''
     id = serializers.IntegerField()
     title = serializers.CharField(max_length = 255)
+
+class OrderSerializer(serializers.Serializer):
+    '''This is order's serializer for GET method(a simple test for getting a list of ordered products in django-rest-framework)'''
+    placed_at = serializers.DateTimeField()
+    payment_status = serializers.CharField()
 
 class ProductsCollectionSerializer(serializers.Serializer):
     '''This is collection serializer for GET method(a simple test for getting a list of products in django-rest-framework)\n
@@ -42,6 +47,26 @@ class ProductModelSerializer(serializers.ModelSerializer):
         ''' This serializable method will implement taz calculation over serialized product's unit_price
         '''
         return product.unit_price * Decimal(1.15)
+
+class OrderedItemModelSerializer(serializers.Serializer):
+    '''This is an ordered item's model serializer class for GET method(a simple test for getting a list of ordered products in django-rest-framework)'''
+    
+    order = OrderSerializer()
+    product = ProductSerializer()
+    price = serializers.DecimalField(max_digits=6, decimal_places=2,source= 'unit_price')
+    ordered_count = serializers.DecimalField(max_digits=6, decimal_places=2,source= 'quantity')
+    price_with_tax = serializers.SerializerMethodField(method_name='calculate_tax')
+    final_price = serializers.SerializerMethodField(method_name='calculate_final_price')
+
+    def calculate_tax(self, order:OrderItem):
+        ''' This serializable method will implement taz calculation over serialized product's unit_price
+        '''
+        return order.unit_price * Decimal(1.15) 
+    
+    def calculate_final_price(self, order:OrderItem):
+        ''' This serializable method will implement taz calculation over serialized product's unit_price
+        '''
+        return self.calculate_tax(order=order) * Decimal(order.quantity)
     
 class ProductPostModelSerializer(serializers.ModelSerializer):
     """
@@ -69,7 +94,6 @@ class ProductPostModelSerializer(serializers.ModelSerializer):
         """
         return product.unit_price * Decimal('1.10')
     
-
 class ProductUpdateModelSerializer(serializers.ModelSerializer):
     """
     Used for PUT / PATCH requests on a single product.
