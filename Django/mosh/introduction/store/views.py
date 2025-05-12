@@ -39,8 +39,7 @@ class ProductsList(APIView):
             status=status.HTTP_201_CREATED
         )
 
-@api_view(['GET', 'PUT', 'PATCH', 'DELETE'])
-def product_detail(request, pk):
+class ProductDetail(APIView):
     """
     Endpoint:  ./store/products/<int:pk>/
 
@@ -49,27 +48,67 @@ def product_detail(request, pk):
     PATCH   → partial update (only changed fields)
     DELETE  → hard-delete the row
     """
-    try:
-        product = Product.objects.select_related('collection').get(pk=pk)
-    except Product.DoesNotExist:
-        return Response({'detail': 'Not found.'},
-                        status=status.HTTP_404_NOT_FOUND)
 
-    if request.method == 'GET':
+    def get_product(pk):
+        try:
+            return Product.objects.select_related('collection').get(pk=pk)
+        except Product.DoesNotExist:
+            return None
+
+    def get(self,request,pk):
+
+        product = self.get_product(pk)
+        if product is None:
+            return Response({'detail': 'Not found.'},status=status.HTTP_404_NOT_FOUND)
+        
         serializer = ProductModelSerializer(product)
-        return Response(serializer.data)
+        return Response(serializer.data)        
+        
+    def put(self,request,pk):
 
-    if request.method in ['PUT', 'PATCH']:
+        product = self.get_product(pk)
+
+        if product is None:
+            return Response({'detail': 'Not found.'},status=status.HTTP_404_NOT_FOUND)
+        
         partial = request.method == 'PATCH'
-        serializer = ProductUpdateModelSerializer(
-            product, data=request.data, partial=partial
-        )
+        serializer = ProductUpdateModelSerializer(product, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response(serializer.data)
-    
-    product.delete()
-    return Response(status=status.HTTP_204_NO_CONTENT)
+
+        return Response(
+            data=serializer.data,
+            status=status.HTTP_201_CREATED
+        )
+
+    def patch(self,request,pk):
+
+        product = self.get_product(pk)
+
+        if product is None:
+            return Response({'detail': 'Not found.'},status=status.HTTP_404_NOT_FOUND)
+        
+        partial = request.method == 'PATCH'
+        serializer = ProductUpdateModelSerializer(product, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(
+            data=serializer.data,
+            status=status.HTTP_201_CREATED
+        )
+
+    def delete(self,request,pk):
+
+        product = self.get_product(pk)
+
+        if product is None:
+            return Response({'detail': 'Not found.'},status=status.HTTP_404_NOT_FOUND)
+        
+        product.delete()
+        return Response(
+            status=status.HTTP_204_NO_CONTENT)
+
 
 @api_view()
 def products_collection(request):
