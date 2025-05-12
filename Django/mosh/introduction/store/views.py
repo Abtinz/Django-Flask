@@ -9,12 +9,12 @@ from decimal import Decimal, InvalidOperation
 from django.contrib.contenttypes.models import ContentType
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework import status
 from .serializers import OrderedItemModelSerializer, ProductModelSerializer, ProductPostModelSerializer, ProductSerializer, ProductUpdateModelSerializer, ProductsCollectionSerializer
 
-@api_view(['GET','POST'])
-def all_products(request):
-    if request.method == 'GET':
+class ProductsList(APIView):
+    def get(self, request):
         """
         Return the a list of all present products in the database
         post: will create a new product
@@ -27,13 +27,13 @@ def all_products(request):
         serializer = ProductModelSerializer(queryset, many =True)
 
         return Response(serializer.data)
-    elif request.method == 'POST':
-        
-        serializer = ProductPostModelSerializer(data= request.data)
-        serializer.is_valid( raise_exception=True)
+    
+    def post(self, request):
 
-        
-        product = serializer.save()              
+        serializer = ProductPostModelSerializer(data= request.data)
+        serializer.is_valid(raise_exception=True)
+        product = serializer.save()
+
         return Response(
             ProductPostModelSerializer(product).data,
             status=status.HTTP_201_CREATED
