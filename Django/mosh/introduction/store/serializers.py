@@ -7,7 +7,7 @@ class CollectionSerializer(serializers.ModelSerializer):
     we will use this serializer aim to show relational collection object in products view! collection = {id and title}\n
     Also, this model serializer class will be defined for Generic view of collection's list and apis
     '''
-    
+
     # annotate() will put product_count into each instance, so we expose it read-only
     product_count = serializers.IntegerField(read_only=True)
 
