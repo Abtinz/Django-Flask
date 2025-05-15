@@ -1,5 +1,5 @@
 from django.http import HttpResponse, JsonResponse
-from store.models import Order, Product, OrderItem, Collection
+from store.models import Order, Product, OrderItem, Collection, Review
 from tags.models import TagItem
 from django.db.models import F, Value, IntegerField #annotation
 from django.db.models import Q 
@@ -13,7 +13,9 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import status
 from rest_framework.generics import ListCreateAPIView
-from .serializers import CollectionSerializer, OrderedItemModelSerializer, ProductModelSerializer, ProductPostModelSerializer, ProductSerializer, ProductUpdateModelSerializer, ProductsCollectionSerializer
+from .serializers import CollectionSerializer, OrderedItemModelSerializer, \
+    ProductModelSerializer, ProductPostModelSerializer, ProductSerializer, \
+    ProductUpdateModelSerializer, ProductsCollectionSerializer, ReviewModelSerializer
 
 class ProductsViewSet(ModelViewSet):
     queryset =  Product.objects.select_related("collection").all()
@@ -32,7 +34,6 @@ class ProductsViewSet(ModelViewSet):
         product.delete()
         return Response(
             status=status.HTTP_204_NO_CONTENT)
-
 
 class ProductsList(APIView):
     def get(self, request):
@@ -649,3 +650,7 @@ def tags_generic_content_type(request):
             "status_code": 200
         }
     )
+
+class ReviewsDetailView(ModelViewSet):
+    queryset = Review.objects.all()
+    serializer_class = ReviewModelSerializer
