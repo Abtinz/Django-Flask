@@ -1,15 +1,23 @@
 from pprint import pprint
 from django.urls import path, include
-from rest_framework.routers import SimpleRouter
+from rest_framework_nested import routers
 from . import views
 
 #routers are being defined aim to control view set class which we've implemented for products view
-router = SimpleRouter()
+router = routers.DefaultRouter()
 router.register('products-view-set', views.ProductsViewSet)
+
+#nested model views urls ...
+product_router = routers.NestedDefaultRouter(router, 'products-view-set', lookup="product")
+product_router.register('reviews', views.ReviewsDetailView, basename='product-reviews')
 pprint(router.urls)
+pprint(product_router.urls)
+
+
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('', include(product_router.urls)),
     path(route = "products/", view=views.ProductsList.as_view(), name="all products list"),
     path(route ='products/details/<int:pk>/', view = views.ProductDetail.as_view(), name='product-detail'),
     path(route = "products/collection/", view=views.products_collection, name="product's collection"),
