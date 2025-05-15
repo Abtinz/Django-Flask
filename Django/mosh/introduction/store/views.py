@@ -11,7 +11,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
-from .serializers import OrderedItemModelSerializer, ProductModelSerializer, ProductPostModelSerializer, ProductSerializer, ProductUpdateModelSerializer, ProductsCollectionSerializer
+from rest_framework.generics import ListCreateAPIView
+from .serializers import CollectionSerializer, OrderedItemModelSerializer, ProductModelSerializer, ProductPostModelSerializer, ProductSerializer, ProductUpdateModelSerializer, ProductsCollectionSerializer
 
 class ProductsList(APIView):
     def get(self, request):
@@ -109,6 +110,14 @@ class ProductDetail(APIView):
         return Response(
             status=status.HTTP_204_NO_CONTENT)
 
+class CollectionListCreateView(ListCreateAPIView):
+
+    queryset = Collection.objects.annotate(
+        product_count = Count('product')
+    ).all()
+
+    serializer_class = CollectionSerializer
+    
 
 @api_view()
 def products_collection(request):

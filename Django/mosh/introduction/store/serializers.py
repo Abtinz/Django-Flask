@@ -1,12 +1,22 @@
 from decimal import Decimal
 from rest_framework import serializers
-from .models import Order, OrderItem, Product
+from .models import Collection, OrderItem, Product
 
-class CollectionSerializer(serializers.Serializer):
+class CollectionSerializer(serializers.ModelSerializer):
     '''This is collection serializer for GET method(a simple test for getting a list of products in django-rest-framework)\n
-    we will use this serializer aim to show relational collection object in products view! collection = {id and title}'''
-    id = serializers.IntegerField()
-    title = serializers.CharField(max_length = 255)
+    we will use this serializer aim to show relational collection object in products view! collection = {id and title}\n
+    Also, this model serializer class will be defined for Generic view of collection's list and apis
+    '''
+    
+    # annotate() will put product_count into each instance, so we expose it read-only
+    product_count = serializers.IntegerField(read_only=True)
+
+    class Meta:
+        model = Collection
+        fields = ['id', 'title', 'product_count']
+
+    def create(self, validated_data):
+        return super().create(validated_data)
 
 class OrderSerializer(serializers.Serializer):
     '''This is order's serializer for GET method(a simple test for getting a list of ordered products in django-rest-framework)'''
