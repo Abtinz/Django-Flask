@@ -10,9 +10,29 @@ from django.contrib.contenttypes.models import ContentType
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.viewsets import ModelViewSet
 from rest_framework import status
 from rest_framework.generics import ListCreateAPIView
 from .serializers import CollectionSerializer, OrderedItemModelSerializer, ProductModelSerializer, ProductPostModelSerializer, ProductSerializer, ProductUpdateModelSerializer, ProductsCollectionSerializer
+
+class ProductsViewSet(ModelViewSet):
+    queryset =  Product.objects.all()
+    serializer_class = ProductModelSerializer
+
+    def get_serializer_context(self):
+        return {"request": self.request}
+
+    def delete(self,request,pk):
+
+        product = self.get_product(pk)
+
+        if product is None:
+            return Response({'detail': 'Not found.'},status=status.HTTP_404_NOT_FOUND)
+        
+        product.delete()
+        return Response(
+            status=status.HTTP_204_NO_CONTENT)
+
 
 class ProductsList(APIView):
     def get(self, request):
