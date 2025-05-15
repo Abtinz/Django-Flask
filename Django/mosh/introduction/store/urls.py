@@ -1,11 +1,17 @@
-from django.urls import path
+from pprint import pprint
+from django.urls import path, include
+from rest_framework.routers import SimpleRouter
 from . import views
 
+#routers are being defined aim to control view set class which we've implemented for products view
+router = SimpleRouter()
+router.register('products-view-set', views.ProductsViewSet)
+pprint(router.urls)
+
 urlpatterns = [
+    path('', include(router.urls)),
     path(route = "products/", view=views.ProductsList.as_view(), name="all products list"),
-    path('products/details/<int:pk>/', views.ProductDetail.as_view(), name='product-detail'),
-    path(route = "products-view-set/", view=views.ProductsViewSet.as_view()),
-    path('products-view-set/<int:pk>/', views.ProductsViewSet.as_view()),
+    path(route ='products/details/<int:pk>/', view = views.ProductDetail.as_view(), name='product-detail'),
     path(route = "products/collection/", view=views.products_collection, name="product's collection"),
     path(route = "products/all/ordered/", view=views.ordered_products, name="all ordered products list"),
     path("products/expensive/",           views.expensive_products,   name="product price filter"), 

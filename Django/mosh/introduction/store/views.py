@@ -16,7 +16,7 @@ from rest_framework.generics import ListCreateAPIView
 from .serializers import CollectionSerializer, OrderedItemModelSerializer, ProductModelSerializer, ProductPostModelSerializer, ProductSerializer, ProductUpdateModelSerializer, ProductsCollectionSerializer
 
 class ProductsViewSet(ModelViewSet):
-    queryset =  Product.objects.all()
+    queryset =  Product.objects.select_related("collection").all()
     serializer_class = ProductModelSerializer
 
     def get_serializer_context(self):

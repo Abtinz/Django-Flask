@@ -57,6 +57,9 @@ class ProductModelSerializer(serializers.ModelSerializer):
         ''' This serializable method will implement taz calculation over serialized product's unit_price
         '''
         return product.unit_price * Decimal(1.15)
+    
+    def create(self, validated_data):
+        return super().create(validated_data)
 
 class OrderedItemModelSerializer(serializers.Serializer):
     '''This is an ordered item's model serializer class for GET method(a simple test for getting a list of ordered products in django-rest-framework)'''
