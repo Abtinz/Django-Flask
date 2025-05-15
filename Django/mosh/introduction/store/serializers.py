@@ -1,6 +1,6 @@
 from decimal import Decimal
 from rest_framework import serializers
-from .models import Collection, OrderItem, Product
+from .models import Collection, OrderItem, Product, Review
 
 class CollectionSerializer(serializers.ModelSerializer):
     '''This is collection serializer for GET method(a simple test for getting a list of products in django-rest-framework)\n
@@ -122,3 +122,11 @@ class ProductUpdateModelSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         instance = super().update(instance, validated_data)
         return instance
+
+class ReviewModelSerializer(serializers.ModelSerializer):
+    '''This is a product's reviews model serializer class for GET method(a simple test for getting a list of products in django-rest-framework)'''
+
+    class Meta:
+        model = Review
+        fields = ['id','name', 'description', 'product', 'date']
+    
