@@ -111,13 +111,17 @@ class ProductDetail(APIView):
             status=status.HTTP_204_NO_CONTENT)
 
 class CollectionListCreateView(ListCreateAPIView):
+    """
+    API view that provides generic handlers for Collections(list retrieval and creation).
 
+    - GET  /store/collections/  → List all collections, each annotated with how many products it contains.
+    - POST /store/collections/  → Create a new collection (provides only title in the request body).
+    """
     queryset = Collection.objects.annotate(
         product_count = Count('product')
     ).all()
 
     serializer_class = CollectionSerializer
-    
 
 @api_view()
 def products_collection(request):
