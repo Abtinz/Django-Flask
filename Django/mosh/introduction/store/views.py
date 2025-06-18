@@ -9,8 +9,9 @@ from decimal import Decimal, InvalidOperation
 from django.contrib.contenttypes.models import ContentType
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.mixins import CreateModelMixin
 from rest_framework.views import APIView
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework import status
 from rest_framework.generics import ListCreateAPIView
 from .serializers import CartModelSerializer, CollectionSerializer, OrderedItemModelSerializer, \
@@ -655,12 +656,8 @@ class ReviewsDetailView(ModelViewSet):
     queryset = Review.objects.all()
     serializer_class = ReviewModelSerializer
 
-class CartView(APIView):
-    def get(self, request):
-        """
-        Return the a list of all carts in the database
-        post: will create a new product
-        URL : ./cart/
-        """
-        queryset = Cart.objects.all()
-        serializer_class = CartModelSerializer
+class CartView(CreateModelMixin, GenericViewSet):
+    #POST method for new cart view
+    queryset = Cart.objects.all()
+    serializer_class = CartModelSerializer
+        
