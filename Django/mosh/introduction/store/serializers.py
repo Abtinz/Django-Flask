@@ -1,6 +1,6 @@
 from decimal import Decimal
 from rest_framework import serializers
-from .models import Collection, OrderItem, Product, Review
+from .models import Cart, Collection, OrderItem, Product, Review
 
 class CollectionSerializer(serializers.ModelSerializer):
     '''This is collection serializer for GET method(a simple test for getting a list of products in django-rest-framework)\n
@@ -130,3 +130,9 @@ class ReviewModelSerializer(serializers.ModelSerializer):
         model = Review
         fields = ['id','name', 'description', 'product', 'date']
     
+class CartModelSerializer(serializers.ModelSerializer):
+    '''This is a cart's model serializer class for POST method'''
+
+    class Meta:
+        model = Cart
+        fields = ['id']

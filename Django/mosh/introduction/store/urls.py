@@ -6,6 +6,7 @@ from . import views
 #routers are being defined aim to control view set class which we've implemented for products view
 router = routers.DefaultRouter()
 router.register('products-view-set', views.ProductsViewSet)
+router.register('carts', views.CartView)
 
 #nested model views urls ...
 product_router = routers.NestedDefaultRouter(router, 'products-view-set', lookup="product")

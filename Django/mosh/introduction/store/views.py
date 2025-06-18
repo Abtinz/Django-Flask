@@ -1,5 +1,5 @@
 from django.http import HttpResponse, JsonResponse
-from store.models import Order, Product, OrderItem, Collection, Review
+from store.models import Cart, Order, Product, OrderItem, Collection, Review
 from tags.models import TagItem
 from django.db.models import F, Value, IntegerField #annotation
 from django.db.models import Q 
@@ -13,7 +13,7 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import status
 from rest_framework.generics import ListCreateAPIView
-from .serializers import CollectionSerializer, OrderedItemModelSerializer, \
+from .serializers import CartModelSerializer, CollectionSerializer, OrderedItemModelSerializer, \
     ProductModelSerializer, ProductPostModelSerializer, ProductSerializer, \
     ProductUpdateModelSerializer, ProductsCollectionSerializer, ReviewModelSerializer
 
@@ -654,3 +654,13 @@ def tags_generic_content_type(request):
 class ReviewsDetailView(ModelViewSet):
     queryset = Review.objects.all()
     serializer_class = ReviewModelSerializer
+
+class CartView(APIView):
+    def get(self, request):
+        """
+        Return the a list of all carts in the database
+        post: will create a new product
+        URL : ./cart/
+        """
+        queryset = Cart.objects.all()
+        serializer_class = CartModelSerializer
