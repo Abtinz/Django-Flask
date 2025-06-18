@@ -169,7 +169,7 @@ class Cart(models.Model):
     Shopping cart for anonymous or logged-in users.
     """
     #lets define uuid for cart section(for our safety from hackers)
-    id = models.UUIDField(primary_key=True, default=uuid4())
+    id = models.UUIDField(primary_key=True, default=uuid4)
     created_at = models.DateTimeField(auto_now_add=True)
 
 
@@ -177,10 +177,13 @@ class CartItem(models.Model):
     """
     Product held in a cart prior to checkout.
     """
-    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name="items")
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveSmallIntegerField()
 
+    class Meta:
+        #we should insure that we have'nt duplicated cart and products for same tuple of these attributes
+        unique_together = [["cart", "product"]]
 class Review(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')
     name = models.CharField(max_length=255)
