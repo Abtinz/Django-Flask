@@ -9,7 +9,7 @@ from decimal import Decimal, InvalidOperation
 from django.contrib.contenttypes.models import ContentType
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework.mixins import CreateModelMixin
+from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, DeleteModelMixin
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework import status
@@ -656,8 +656,12 @@ class ReviewsDetailView(ModelViewSet):
     queryset = Review.objects.all()
     serializer_class = ReviewModelSerializer
 
-class CartView(CreateModelMixin, GenericViewSet):
+class CartView(CreateModelMixin, 
+               GenericViewSet, 
+               RetrieveModelMixin, 
+               DeleteModelMixin):
     #POST method for new cart view
-    queryset = Cart.objects.prefetch_related.all()
+    #Prefetch related will load inner joints before selecting all cart so we will face a better SQL execution time
+    queryset = Cart.objects.prefetch_related('items__product').all()
     serializer_class = CartModelSerializer
         

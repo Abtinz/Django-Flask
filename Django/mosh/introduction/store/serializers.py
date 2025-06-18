@@ -140,7 +140,7 @@ class CartItemSerializer(serializers.ModelSerializer):
 class CartModelSerializer(serializers.ModelSerializer):
     '''This is a cart's model serializer class for POST, GET method'''
     id = serializers.UUIDField(read_only = True)
-    items = CartItemSerializer(many = True)
+    items = CartItemSerializer(many = True, read_only = True)
     class Meta:
         model = Cart
         fields = ['id', 'items']
