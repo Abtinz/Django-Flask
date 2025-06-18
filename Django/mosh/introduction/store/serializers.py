@@ -130,9 +130,9 @@ class ReviewModelSerializer(serializers.ModelSerializer):
         model = Review
         fields = ['id','name', 'description', 'product', 'date']
     
-class CartModelSerializer(serializers.ModelSerializer):
+class CartModelSerializer(serializers.Mod):
     '''This is a cart's model serializer class for POST method'''
-
+    id = serializers.UUIDField(read_only = True)
     class Meta:
         model = Cart
         fields = ['id']
