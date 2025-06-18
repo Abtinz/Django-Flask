@@ -658,6 +658,6 @@ class ReviewsDetailView(ModelViewSet):
 
 class CartView(CreateModelMixin, GenericViewSet):
     #POST method for new cart view
-    queryset = Cart.objects.all()
+    queryset = Cart.objects.prefetch_related.all()
     serializer_class = CartModelSerializer
         
