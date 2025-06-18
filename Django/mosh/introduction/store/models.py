@@ -1,4 +1,5 @@
 from django.db import models
+from uuid import uuid4 # we will use it for default value of card uuid
 
 
 class Promotion(models.Model):
@@ -167,6 +168,8 @@ class Cart(models.Model):
     """
     Shopping cart for anonymous or logged-in users.
     """
+    #lets define uuid for cart section(for our safety from hackers)
+    id = models.UUIDField(primary_key=True, default=uuid4())
     created_at = models.DateTimeField(auto_now_add=True)
 
 
