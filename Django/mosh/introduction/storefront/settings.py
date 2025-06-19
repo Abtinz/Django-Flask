@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "djoser",
     "playground",
     "debug_toolbar",
     "store",
@@ -139,7 +140,16 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 #This definition will help serializers and rest framework to return a decimal and float value except of string one!
 REST_FRAMEWORK = {
-    'COERCE_DECIMAL_TO_STRING':False
+    'COERCE_DECIMAL_TO_STRING':False,
+    #DJOSER authentication configs
+    'DEFAULT_AUTHENTICATION_CLASSES' : (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+
+#DJOSER authentication configs -> headers ... 
+SIMPLE_JWT = {
+    'AUTH_HEADER_TYPE': ('JWT',),
 }
 
 #If we extend default user's abstract class from django.auth, we should notify

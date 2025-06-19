@@ -664,4 +664,5 @@ class CartView(CreateModelMixin,
     #Prefetch related will load inner joints before selecting all cart so we will face a better SQL execution time
     queryset = Cart.objects.prefetch_related('items__product').all()
     serializer_class = CartModelSerializer
+
         
