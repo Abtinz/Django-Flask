@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 from uuid import uuid4 # we will use it for default value of card uuid
 
 
@@ -189,3 +190,7 @@ class Review(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(max_length=1500)
     date = models.DateField(auto_created=True)
+
+class User(AbstractUser):
+    email = models.EmailField(unique=True)
+    
