@@ -7,6 +7,7 @@ from . import views
 router = routers.DefaultRouter()
 router.register('products-view-set', views.ProductsViewSet)
 router.register('carts', views.CartView)
+router.register('customers', views.CustomerViewSet)
 
 #nested model views urls ...
 product_router = routers.NestedDefaultRouter(router, 'products-view-set', lookup="product")

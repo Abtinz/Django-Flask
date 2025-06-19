@@ -1,5 +1,5 @@
 from django.http import HttpResponse, JsonResponse
-from store.models import Cart, Order, Product, OrderItem, Collection, Review
+from store.models import Cart, Customer, Order, Product, OrderItem, Collection, Review
 from tags.models import TagItem
 from django.db.models import F, Value, IntegerField #annotation
 from django.db.models import Q 
@@ -9,12 +9,12 @@ from decimal import Decimal, InvalidOperation
 from django.contrib.contenttypes.models import ContentType
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, DeleteModelMixin
+from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, DeleteModelMixin, UpdateModelMixin
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework import status
 from rest_framework.generics import ListCreateAPIView
-from .serializers import CartModelSerializer, CollectionSerializer, OrderedItemModelSerializer, \
+from .serializers import CartModelSerializer, CollectionSerializer, CustomerSerializer, OrderedItemModelSerializer, \
     ProductModelSerializer, ProductPostModelSerializer, ProductSerializer, \
     ProductUpdateModelSerializer, ProductsCollectionSerializer, ReviewModelSerializer
 
@@ -665,4 +665,9 @@ class CartView(CreateModelMixin,
     queryset = Cart.objects.prefetch_related('items__product').all()
     serializer_class = CartModelSerializer
 
-        
+class CustomerViewSet(CreateModelMixin, 
+                      GenericViewSet, 
+                      RetrieveModelMixin,
+                      UpdateModelMixin):
+    queryset = Customer.objects.all()
+    serializer_class = CustomerSerializer     
