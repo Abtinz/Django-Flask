@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.conf import settings
 from uuid import uuid4 # we will use it for default value of card uuid
 
 
@@ -78,7 +79,7 @@ class Customer(models.Model):
     """
     End-user profile.
 
-    `Meta` customisations  
+    `Meta` customizations  
     * `db_table` points to an existing legacy table.  
     * Composite index on (`last_name`, `first_name`) speeds up
       directory-like queries and admin search.
@@ -90,25 +91,28 @@ class Customer(models.Model):
         ("G", "Gold")
     ]
 
-    first_name = models.CharField(max_length=255)
-    last_name = models.CharField(max_length=255)
-    email = models.EmailField(unique=True)
     phone = models.CharField(max_length=25)
     birth_date = models.DateField(null=True)
-    membership = models.CharField(
-        max_length=1,
-        choices=MEMBERSHIP_CHOICES,
-        default=MEMBERSHIP_DEFAULT
-    )
+    membership = models.CharField(max_length=1,
+            choices=MEMBERSHIP_CHOICES,
+            default=MEMBERSHIP_DEFAULT)
+    
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete= models.CASCADE)
 
     def __str__(self):
-        return self.email
+        return self.user.email
 
+    def first_name(self):
+        return self.user.first_name
+    
+    def last_name(self):
+        return self.user.last_name
+    
     class Meta:
-        ordering = ["first_name"]
+        ordering = ["user__first_name"]
         db_table = "store_customer"
         indexes = [
-            models.Index(fields=['last_name', 'first_name'])
+            models.Index(fields=['user__last_name', 'user__first_name'])
         ]
 
 
