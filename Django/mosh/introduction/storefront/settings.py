@@ -155,3 +155,9 @@ SIMPLE_JWT = {
 #If we extend default user's abstract class from django.auth, we should notify
 #django from this alternation with AUTH_USER_MODEL property and its new model class address
 AUTH_USER_MODEL = 'store.User'
+
+DJOSER = {
+    'SERIALIZER': {
+        'user_create': 'playground.serializer.UserCreateSerializer'
+    }
+}
