@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -150,6 +151,8 @@ REST_FRAMEWORK = {
 #DJOSER authentication configs -> headers ... 
 SIMPLE_JWT = {
     'AUTH_HEADER_TYPE': ('JWT',),
+    #token life time definition using timedelta
+    'ACCESS_TOKEN_LIFETIME' : timedelta(days=365)
 }
 
 #If we extend default user's abstract class from django.auth, we should notify
