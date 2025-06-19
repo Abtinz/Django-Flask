@@ -2,7 +2,12 @@ from django.contrib import admin
 from django.db import models
 from django.urls import reverse
 from django.utils.html import format_html, urlencode
-from .models import Customer, OrderItem, Collection, Product
+from .models import Customer, OrderItem, Collection, Product, User
+from django.contrib.contenttypes.admin import UserAdmin as  BaseUserAdmin
+
+@admin.register(User)
+class UserAdmin(BaseUserAdmin):
+    pass
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
